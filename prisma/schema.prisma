@@ -7,12 +7,82 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model score {
-  ID        Int      @id @default(autoincrement())
-  FIRSTNAME String   @db.VarChar(64)
-  SURNAME   String   @db.VarChar(64)
-  MAIL      String   @unique(map: "MAIL") @db.VarChar(64)
-  SCORE     Int
-  TIMESTAMP DateTime @default(now()) @db.Timestamp(0)
-  GAMETAG   String   @db.VarChar(50)
+/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
+model event_teilnehmer {
+  event_id Int      @default(0)
+  user_id  Int      @default(0)
+  bezahlt  Int      @default(0)
+  anwesend DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([bezahlt], map: "bezahlt")
+  @@index([event_id], map: "event_id")
+  @@index([user_id], map: "user_id")
+  @@ignore
+}
+
+model t_contest {
+  tcid       Int      @id @default(autoincrement())
+  tid        Int      @default(0)
+  tcrunde    Int      @default(0)
+  team_a     Int      @default(0)
+  team_b     Int      @default(0)
+  wins_a     Int      @default(0)
+  wins_b     Int      @default(0)
+  won        Int      @default(0)
+  dateline   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  host       String   @default("") @db.VarChar(15)
+  user_id    Int      @default(0)
+  row        Int      @default(0)
+  comments   Int      @default(0)
+  starttime  DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  ignoretime Int      @default(0)
+  ready_a    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  ready_b    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  defaultwin Int      @default(0)
+  intern     String?  @db.Text
+  public     String?  @db.Text
+
+  @@index([comments], map: "comments")
+  @@index([row], map: "row")
+  @@index([tcrunde], map: "tcrunde")
+  @@index([team_a], map: "team_a")
+  @@index([team_b], map: "team_b")
+  @@index([tid], map: "tid")
+  @@index([won], map: "won")
+}
+
+model t_teilnehmer {
+  tnid        Int     @id @default(autoincrement())
+  tid         Int     @default(0)
+  tnname      String? @db.VarChar(255)
+  tnanz       Int?
+  tnleader    Int?
+  tnpasswd    String? @db.VarChar(255)
+  tcheckedin  Int     @default(0)
+  loser       Int     @default(0)
+  tnlogo      Int     @default(0)
+  homepage    String? @db.VarChar(255)
+  irc         String? @db.VarChar(255)
+  description String? @db.Text
+  countrycode String? @db.Char(2)
+  rankpos     String  @default("") @db.VarChar(255)
+
+  @@index([loser], map: "looser")
+  @@index([tid], map: "tid")
+  @@index([tnanz], map: "tnanz")
+}
+
+model t_teilnehmer_part {
+  tnid     Int      @default(0)
+  user_id  Int      @default(0)
+  dateline DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@id([tnid, user_id])
+}
+
+model user {
+  id    Int    @id @default(autoincrement())
+  email String @db.VarChar(255)
+
+  @@index([email], map: "email")
 }
