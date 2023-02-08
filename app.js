@@ -18,7 +18,7 @@ app.use(cors());
 
 app.put('/score', async (req, res) => {
   const scoreJson = req.body;
-  const user = await getUser(inputJson.email);
+  const user = await getUser(scoreJson.email);
 
   if(user && await checkIfUserIsLanParticipant(user)) {
     await handleScore(scoreJson, user, res);
@@ -40,7 +40,7 @@ app.put('/user', async (req, res) => {
 
 async function handleScore(scoreJson, user, res) {
   if (isScoreValid(scoreJson)) {
-    await submitScore(scoreJson, user);
+    await submitScore(scoreJson.score, user);
     res.send("score updated");
   } else {
     manipulatedGameResponse(res);
@@ -48,22 +48,16 @@ async function handleScore(scoreJson, user, res) {
 }
 
 async function checkIfUserIsLanParticipant(user) {
-  const lanParticipant = await prisma.event_teilnehmer.findFirst({
-    where: {
-      user_id: user.id,
-      event_id: process.env.EVENT_ID,
-      bezahlt: 1,
-      anwesend: {
-        gt: new Date('0000-00-00 00:00:00')
-      }
-    }
-  });
+  const lanParticipant =
+      await prisma.$queryRaw
+          `select event_id,user_id,bezahlt,anwesend from event_teilnehmer 
+                where user_id=${user.id} and event_id=${process.env.EVENT_ID} and bezahlt=1 and anwesend>\'0000-00-00 00:00:00\'`;
 
   return !!lanParticipant;
 }
 
 async function getUser(email) {
-  return await prisma.score.findUnique({
+  return await prisma.user.findFirst({
     where: {
       email: email
     }
@@ -76,45 +70,149 @@ function isScoreValid(scoreJson) {
   return hash === scoreJson.ver;
 }
 
-async function submitScore(scoreJson, user) {
+async function submitScore(score, user) {
+  let tournamentParticipant = await getTournamentParticipant(user.id);
 
-  let tournamentParticipantPart = await getTournamentParticipantPart(user.id);
-
-  if(!tournamentParticipantPart) {
-    tournamentParticipantPart = await registerToTournament(user);
+  if(!tournamentParticipant) {
+    tournamentParticipant = await registerToTournament(user);
   }
 
-  await createScore(scoreJson.score, tournamentParticipantPart.tnid);
+  console.log("tnid: " + tournamentParticipant.tnid);
+
+  let currentScore = await getScore(tournamentParticipant.tnid)
+
+  if(isScoreExisting(currentScore)) {
+    if (isPersonalHighScore(currentScore, score)) {
+      console.log("Updated Highscore");
+      await updateScore(score, tournamentParticipant.tnid);
+    }
+  } else {
+    console.log("Created Highscore");
+    await createScore(score, tournamentParticipant.tnid);
+  }
 }
 
-async function getTournamentParticipantPart(userId) {
-  return await prisma.t_teilnehmer_part.findUnique({
+function isScoreExisting(currentScore) {
+  return !!currentScore;
+}
+
+function isPersonalHighScore(currentScore, newScore) {
+  return parseInt(currentScore) < parseInt(newScore);
+}
+
+async function getTournamentParticipant(userId) {
+  return await prisma.t_teilnehmer.findFirst({
     where: {
-      user_id: user.id
+      tnleader: userId,
+      tid: parseInt(process.env.T_ID)
     }
   });
 }
 
+async function getScore(tnid) {
+  const contest = await prisma.t_contest.findFirst({
+    where: {
+      tid: parseInt(process.env.T_ID),
+      team_a: tnid
+    },
+    select: {
+      intern: true
+    }
+  });
+
+  console.log("score: " + parseReadableTimeToScore(contest.intern));
+
+  return contest ? parseReadableTimeToScore(contest.intern) : undefined;
+}
+
+function parseScoreToReadableTime(score) {
+  //score = string of milliseconds
+  let millisecondsTotal = parseInt(score);
+
+  //turning to strings to keep leading zeros, adding 0.1 to keep following zeros and slicing out last digit in string
+  let ms = millisecondsTotal % 1000;
+  let msString = (((ms + .1) / 1000) + "").slice(2, -1);
+  let seconds = Math.floor(millisecondsTotal / 1000) % 60;
+  let secondsString = (((seconds + 0.1) / 100) + "").slice(2, -1);
+  let minutes = Math.floor(millisecondsTotal / 1000 / 60);
+
+  return minutes + ":" + secondsString + "." + msString;
+}
+
+function parseReadableTimeToScore(timeString) {
+  let timeArray = timeString.replaceAll(":", ".").split(".");
+  let minutes = parseInt(timeArray[0]);
+  let seconds = parseInt(timeArray[1]);
+  let ms = parseInt(timeArray[2]);
+
+  return minutes * 60 * 100 + seconds * 60 + ms;
+}
+
 async function createScore(score, tnid) {
-  await prisma.t_contest.create({
+  console.log("create score");
+  await prisma.$queryRaw
+      `insert into t_contest(
+                      tid, 
+                      tcrunde, 
+                      team_a, 
+                      team_b, 
+                      wins_a, 
+                      wins_b, 
+                      won, 
+                      dateline, 
+                      user_id,
+                      row, 
+                      comments, 
+                      starttime, 
+                      ignoretime, 
+                      ready_a, 
+                      ready_b, 
+                      defaultwin, 
+                      intern) 
+              values (
+                      ${parseInt(process.env.T_ID)},
+                      0,
+                      ${tnid},
+                      '-2',
+                      0,
+                      0,
+                      1,
+                      '0000-00-00 00:00:00',
+                      0,
+                      0,
+                      0,
+                      '0000-00-00 00:00:00',
+                      0,
+                      '0000-00-00 00:00:00',
+                      '0000-00-00 00:00:00',
+                      0,
+                       ${parseScoreToReadableTime(score)}
+                      )`;
+}
+
+async function updateScore(score, tnid) {
+
+  //Since we dont deal with unique entries, we need to find first and guarantee uniqueness by business logic
+  //ONLY select intern score, if prisma tries to parse zero dates from database it throws errors
+  let contest = await prisma.t_contest.findFirst({
+    where: {
+      tid: parseInt(process.env.T_ID),
+      team_a: tnid
+    },
+    select: {
+      tcid: true
+    }
+  });
+
+  await prisma.t_contest.update({
+    where: {
+      tcid: contest.tcid
+    },
     data: {
-      tid: process.env.T_ID,
-      tcrunde: 0,
-      team_a: tnid,
-      team_b: '-2',
-      wins_a: 0,
-      wins_b: 0,
-      won: 1,
-      dateline: new Date('0000-00-00 00:00:00'),
-      user_id: 0,
-      row: 0,
-      comments: 0,
-      starttime: new Date('0000-00-00 00:00:00'),
-      ignoretime: 0,
-      ready_a: new Date('0000-00-00 00:00:00'),
-      ready_b: new Date('0000-00-00 00:00:00'),
-      defaultwin: 0,
-      intern: score
+      intern: score + ""
+    },
+    select: {
+      intern: true
     }
   })
 }
@@ -123,26 +221,28 @@ async function registerToTournament(user) {
   const highestIndex = await prisma.t_teilnehmer.findMany({
     take: 1,
     orderBy: {
-      id: "desc"
+      tnid: "desc"
     }
   });
 
   const tournamentParticipant = await prisma.t_teilnehmer.create({
     data: {
-      tnid: highestIndex[0].id + 1,
-      tid: process.env.T_ID,
+      tnid: highestIndex[0].tnid + 1,
+      tid: parseInt(process.env.T_ID),
       tnanz: 1,
       tnleader: user.id
     }
   });
 
-  return await prisma.t_teilnehmer_part.create({
+  await prisma.t_teilnehmer_part.create({
     data: {
       tnid: tournamentParticipant.tnid,
       user_id: user.id,
       dateline: new Date()
     }
   });
+
+  return tournamentParticipant;
 }
 
 function manipulatedGameResponse(res) {
@@ -168,12 +268,12 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send('error');
 });
 
 function getHashString(scoreJson) {
   const scoreHash = parseInt(scoreJson.score) * 2896;
-  const mailHash = scoreJson.mail.split("@")[0] + scoreJson.mail.split(".")[1].reverse() + "|" + scoreJson.score * 2;
+  const mailHash = scoreJson.email.split("@")[0] + "|" + scoreJson.score * 2;
 
   console.log(scoreHash + mailHash);
   return scoreHash + mailHash;

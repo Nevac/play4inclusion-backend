@@ -9,6 +9,7 @@ datasource db {
 
 /// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
 model event_teilnehmer {
+  id       Int      @id @default(autoincrement())
   event_id Int      @default(0)
   user_id  Int      @default(0)
   bezahlt  Int      @default(0)
@@ -82,7 +83,9 @@ model t_teilnehmer_part {
 
 model user {
   id    Int    @id @default(autoincrement())
+  nick  String @default("") @db.VarChar(50)
   email String @db.VarChar(255)
 
   @@index([email], map: "email")
+  @@index([nick], map: "nick")
 }
