@@ -154,7 +154,11 @@ async function applyRanks(scores) {
 
   for(let index in scores) {
     const score = scores[index];
-    rankedScores.push({rank: parseInt(index)+1, id: score.id, nick: score.nick, score: parseMsToReadableTime(parseSecondsToMs(score.intern))})
+    let scoreText = "";
+    if(score.intern !== null) {
+      scoreText = score.intern
+    }
+    rankedScores.push({rank: parseInt(index)+1, id: score.id, nick: score.nick, score: parseMsToReadableTime(parseSecondsToMs(scoreText))})
   }
 
   return rankedScores;
