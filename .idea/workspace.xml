@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="updated backend to be more integrated with lock and load databases">
+    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="polishing and bug fixing">
+      <change afterPath="$PROJECT_DIR$/routes/tournament.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/users.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/score.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,9 +53,14 @@
     <property name="go.format.on.save.advertiser.fired" value="true" />
     <property name="go.formatter.settings.were.checked" value="true" />
     <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../cropled-webpage" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/routes" />
     <property name="nodejs_package_manager_path" value="yarn" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\routes" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -63,6 +72,16 @@
       <updated>1662126858797</updated>
       <workItem from="1662126860351" duration="21068000" />
       <workItem from="1662571181489" duration="3806000" />
+      <workItem from="1675983080421" duration="11030000" />
+      <workItem from="1676035245258" duration="16198000" />
+      <workItem from="1676572365181" duration="84000" />
+      <workItem from="1676572905313" duration="2099000" />
+      <workItem from="1676636650933" duration="679000" />
+      <workItem from="1676811171683" duration="3826000" />
+      <workItem from="1676900809648" duration="17945000" />
+      <workItem from="1677076450763" duration="7739000" />
+      <workItem from="1677171173692" duration="1426000" />
+      <workItem from="1677202706707" duration="1864000" />
     </task>
     <task id="LOCAL-00001" summary="updated backend to be more integrated with lock and load databases">
       <created>1675785788401</created>
@@ -78,7 +97,14 @@
       <option name="project" value="LOCAL" />
       <updated>1675786016848</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="added score handling for readable text">
+      <created>1675826484136</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1675826484136</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,7 +135,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="updated backend to be more integrated with lock and load databases" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated backend to be more integrated with lock and load databases" />
+    <MESSAGE value="added score handling for readable text" />
+    <MESSAGE value="polishing and bug fixing" />
+    <option name="LAST_COMMIT_MESSAGE" value="polishing and bug fixing" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

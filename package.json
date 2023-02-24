@@ -13,6 +13,7 @@
     "cors": "^2.8.5",
     "debug": "~2.6.9",
     "express": "~4.16.1",
+    "express-winston": "^4.2.0",
     "http-errors": "~1.6.3",
     "lorem-ipsum": "^2.0.3",
     "md5": "^2.2.1",
@@ -20,7 +21,8 @@
     "morgan": "~1.9.1",
     "pug": "^2.0.4",
     "sha2": "^1.0.2",
-    "uglify-js": "^2.6.0"
+    "uglify-js": "^2.6.0",
+    "winston": "^3.8.2"
   },
   "devDependencies": {
     "prisma": "^4.3.1"
