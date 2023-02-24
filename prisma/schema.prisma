@@ -89,3 +89,49 @@ model user {
   @@index([email], map: "email")
   @@index([nick], map: "nick")
 }
+
+model t_turnier {
+  tid                   Int      @id @default(autoincrement())
+  tgroupid              Int      @default(0)
+  tactive               Int      @default(0)
+  topen                 Int      @default(0)
+  tclosed               Int      @default(0)
+  tpause                Int      @default(0)
+  teventid              Int      @default(0)
+  tname                 String   @default("") @db.VarChar(255)
+  tplaytype             String   @default("") @db.VarChar(255)
+  tparams               String   @default("") @db.VarChar(255)
+  tminanz               Int?
+  tmaxanz               Int?
+  tuserproteam          Int      @default(0)
+  tmoreplayer           Int      @default(0)
+  tlogo                 String?  @db.VarChar(255)
+  tregeln               String?  @db.Text
+  tinfotext             String?  @db.Text
+  tstart                DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  troundtime            Int      @default(0)
+  troundpause           Int      @default(0)
+  tcheckin              Int      @default(0)
+  tcheckintime          Int      @default(120)
+  tautodefaultwin       Int      @default(0)
+  tadultsonly           Int      @default(0)
+  tpassword             String?  @db.VarChar(255)
+  tprice1               String   @default("") @db.VarChar(255)
+  tprice2               String   @default("") @db.VarChar(255)
+  tprice3               String   @default("") @db.VarChar(255)
+  tnight                Int      @default(1)
+  tnightbegin           DateTime @default(dbgenerated("('03:00:00')")) @db.Time(0)
+  tnightend             DateTime @default(dbgenerated("('10:00:00')")) @db.Time(0)
+  tdefmap               String?  @db.Text
+  tadmins               String?  @db.Text
+  tcoins                Int      @default(0)
+  tcoinsreturn          Int      @default(1)
+  c_contests            Int?
+  c_contests_complete   Int?
+  c_teilnehmer          Int?
+  c_teilnehmer_complete Int?
+  c_complete            Int?
+  c_round               String?  @db.VarChar(11)
+
+  @@index([tactive], map: "tactive")
+}

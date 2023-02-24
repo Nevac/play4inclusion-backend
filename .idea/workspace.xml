@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="restructured project">
-      <change afterPath="$PROJECT_DIR$/.env.template" afterDir="false" />
+    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="added env template">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/score.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/score.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/tournament.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/tournament.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -76,7 +80,7 @@
       <workItem from="1676900809648" duration="17945000" />
       <workItem from="1677076450763" duration="7739000" />
       <workItem from="1677171173692" duration="1426000" />
-      <workItem from="1677202706707" duration="1980000" />
+      <workItem from="1677202706707" duration="4936000" />
     </task>
     <task id="LOCAL-00001" summary="updated backend to be more integrated with lock and load databases">
       <created>1675785788401</created>
@@ -106,7 +110,14 @@
       <option name="project" value="LOCAL" />
       <updated>1677238823056</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="added env template">
+      <created>1677238906628</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1677238906628</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -140,7 +151,8 @@
     <MESSAGE value="added score handling for readable text" />
     <MESSAGE value="polishing and bug fixing" />
     <MESSAGE value="restructured project" />
-    <option name="LAST_COMMIT_MESSAGE" value="restructured project" />
+    <MESSAGE value="added env template" />
+    <option name="LAST_COMMIT_MESSAGE" value="added env template" />
   </component>
   <component name="VgoProject">
     <integration-enabled>true</integration-enabled>

@@ -52,8 +52,14 @@ router.put('/score', async (req, res) => {
   const user = await getUser(scoreJson.email);
 
   if(user && await checkIfUserIsLanParticipant(user)) {
-    console.info("User is participant");
-    await handleScore(scoreJson, user, res);
+    let isTLive = await isTournamentLive();
+
+    if(isTLive) {
+      console.info("User is participant");
+      await handleScore(scoreJson, user, res);
+    } else {
+      tournamentNotLiveResponse(res);
+    }
   } else {
     userNotFoundResponse(res);
   }
@@ -67,6 +73,15 @@ router.put('/user', async (req, res) => {
     res.send(user);
   } else {
     userNotFoundResponse(res);
+  }
+});
+
+router.get('/tournament', async (req, res) => {
+
+  if(await isTournamentLive()) {
+    res.send({ tournamentState: "open"});
+  } else {
+    res.send({tournamentState: "closed"});
   }
 });
 
@@ -376,6 +391,25 @@ function scoreNotFoundResponse(res) {
 function userNotFoundResponse(res) {
   res.status(404);
   res.send("User not found");
+}
+
+function tournamentNotLiveResponse(res) {
+  res.status(403);
+  res.send("Tournament is closed");
+}
+
+async function isTournamentLive() {
+  const tournament = await prisma.t_turnier.findUnique({
+    where: {
+      tid: parseInt(process.env.T_ID),
+    },
+    select: {
+      tactive: true,
+      tclosed: true
+    }
+  });
+
+  return tournament.tactive === 1 && tournament.tclosed === 0;
 }
 
 // catch 404 and forward to error handler

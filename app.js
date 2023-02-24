@@ -31,7 +31,5 @@ app.use(expressWinston.logger({
   ignoreRoute: function (req, res) { return false; } // optional: allows to skip some log messages based on request and/or response
 }));
 app.use(scoreRouter);
-//app.use(tournamentRouter);
-
 
 module.exports = app;
