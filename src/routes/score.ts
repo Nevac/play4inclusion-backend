@@ -1,9 +1,10 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient()
-var express = require('express');
+import express from "express";
+import { PrismaClient } from '@prisma/client';
+import createError from 'http-errors';
 const SHA2 = require("sha2");
-const createError = require("http-errors");
-var router = express.Router();
+
+const prisma = new PrismaClient();
+const router = express.Router();
 
 router.get('/score', async (req, res) => {
   const responseBody = {};
@@ -86,7 +87,7 @@ router.get('/tournament', async (req, res) => {
 });
 
 async function getRankings() {
-  const scores = await getScores();
+  const scores = await getScores() as any[];
   scores.sort(compareRanks);
   return applyRanks(scores);
 }
@@ -439,4 +440,30 @@ function getHashString(scoreJson) {
   return scoreHash + mailHash;
 }
 
-module.exports = router;
+var passport = require('passport');
+var LocalStrategy = require('passport-local');
+var md5 = require('md5');
+
+passport.use(new LocalStrategy(async function verify(email, password, cb) {
+
+  const user = await prisma.user.findFirst({
+    where: {
+      email: email,
+      passwort: md5(password)
+    }
+  });
+
+  if(user) {
+    return cb(null, user)
+  }
+
+  return cb(null, false, { message: 'loginFailed'})
+}));
+
+router.post('/login', passport.authenticate('local',
+    {
+      successRedirect: '/',
+      failureRedirect: '/login'
+    }));
+
+export default router;

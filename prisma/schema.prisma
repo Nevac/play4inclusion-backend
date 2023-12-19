@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider        = "prisma-client-js"
+  previewFeatures = ["fullTextSearch", "fullTextIndex"]
 }
 
 datasource db {
@@ -7,18 +8,912 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-/// The underlying table does not contain a valid unique identifier and can therefore currently not be handled by the Prisma Client.
-model event_teilnehmer {
+model article {
+  id               Int      @id @default(autoincrement())
+  section_id       Int      @default(0)
+  dateline         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  user_id          Int      @default(0)
+  generator_id     Int      @default(0)
+  display_teamname Int      @default(0)
+  title            String   @default("") @db.VarChar(255)
+  content          String?  @db.VarChar(3000)
+  encode           Int      @default(0)
+  readonly         Int      @default(0)
+  active           Int      @default(1)
+  edited           DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  edituser         Int      @default(0)
+  count_read       Int      @default(1)
+  allow_comments   Int      @default(0)
+  comments         Int      @default(0)
+  intern           String?  @db.Text
+
+  @@index([content], map: "content")
+  @@index([section_id], map: "section_id")
+}
+
+model article_section {
+  id       Int     @id @default(autoincrement())
+  name     String  @default("") @db.VarChar(255)
+  short    String  @default("") @db.VarChar(255)
+  urlshort String  @default("") @db.VarChar(255)
+  intro    String? @db.Text
+  template String  @default("") @db.VarChar(255)
+}
+
+model beamer_timeline {
+  id            Int      @id @default(autoincrement())
+  beamer_id     Int      @default(0)
+  active        Int      @default(0)
+  name          String   @default("") @db.VarChar(255)
+  type          String   @default("") @db.VarChar(255)
+  content       String?  @db.Text
+  duration      Int      @default(10)
+  transition    String   @default("") @db.VarChar(255)
+  display_order Int      @default(0)
+  dateline      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  template      String   @default("") @db.VarChar(255)
+
+  @@index([active], map: "active")
+  @@index([beamer_id], map: "beamer_id")
+}
+
+model beamer_view {
+  id       Int    @id @default(autoincrement())
+  active   Int    @default(0)
+  name     String @default("") @db.VarChar(255)
+  template String @default("beamer_page") @db.VarChar(255)
+
+  @@index([active], map: "active")
+}
+
+model catering_basket {
+  id         Int      @id @default(autoincrement())
+  product_id Int      @default(0)
+  user_id    Int      @default(0)
+  quantity   Int      @default(0)
+  time_added DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+}
+
+model catering_groups {
+  id          Int    @id @default(autoincrement())
+  name        String @default("") @db.VarChar(255)
+  active      Int    @default(1)
+  allow_order Int    @default(1)
+
+  @@index([active], map: "active")
+}
+
+model catering_konto {
+  user_id Int   @id @default(0)
+  credits Float @default(0.00)
+}
+
+model catering_order {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @default(0)
+  final_price Decimal  @default(0.00) @db.Decimal(8, 2)
+  price_paid  Decimal  @default(0.00) @db.Decimal(8, 2)
+  time_added  DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  status      Int      @default(0)
+}
+
+model catering_order_part {
+  id           Int      @id @default(autoincrement())
+  order_id     Int      @default(0)
+  product_id   Int      @default(0)
+  order_nr     String   @default("") @db.VarChar(50)
+  name         String   @default("") @db.VarChar(255)
+  quantity     Int      @default(0)
+  price        Decimal  @default(0.00) @db.Decimal(8, 2)
+  status       Int      @default(1)
+  user_id      Int      @default(0)
+  time_added   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  time_changed DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+}
+
+model catering_products {
+  id          Int     @id @default(autoincrement())
+  order_nr    String  @default("") @db.VarChar(50)
+  name        String  @default("") @db.VarChar(255)
+  description String? @db.Text
+  price       Decimal @default(0.00) @db.Decimal(8, 2)
+  active      Int     @default(1)
+  group_id    Int     @default(0)
+
+  @@index([active], map: "active")
+  @@index([group_id], map: "group_id")
+}
+
+model catering_transaction {
   id       Int      @id @default(autoincrement())
-  event_id Int      @default(0)
+  konto_id Int      @default(0)
   user_id  Int      @default(0)
-  bezahlt  Int      @default(0)
-  anwesend DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  credits  Float    @default(0.00)
+  short    String   @default("") @db.VarChar(255)
+  dateline DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([konto_id], map: "user_id")
+  @@index([user_id], map: "user_id_2")
+}
+
+model cms_media {
+  id             Int              @id @default(autoincrement())
+  parent_id      Int              @default(0)
+  level          Int              @default(0)
+  children       Int              @default(0)
+  is_dir         Int              @default(0)
+  refer_id       Int              @default(0)
+  description    String           @default("") @db.VarChar(255)
+  additional     String?          @db.Text
+  filename       String           @default("") @db.VarChar(255)
+  counter        Int              @default(0)
+  user_id        Int              @default(0)
+  readonly       Int              @default(0)
+  dateline       DateTime         @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  ip             String           @default("") @db.VarChar(15)
+  dns            String           @default("") @db.VarChar(50)
+  filesavename   String           @default("") @db.VarChar(255)
+  filesize       Int              @default(0)
+  filetype       String           @default("") @db.VarChar(255)
+  imageinfo      String           @default("") @db.VarChar(255)
+  access         cms_media_access @default(public)
+  allow_comments Int              @default(0)
+  comments       Int              @default(0)
+
+  @@index([is_dir], map: "is_dir")
+  @@index([parent_id], map: "parent_id")
+}
+
+model country_code2name {
+  code     String @id @default("") @db.Char(2)
+  codelong String @default("") @db.Char(3)
+  name     String @default("") @db.VarChar(255)
+}
+
+model country_ip2code {
+  ip_from BigInt @default(0)
+  ip_to   BigInt @default(0)
+  code    String @default("") @db.Char(2)
+
+  @@id([ip_from, ip_to])
+}
+
+model dotlan_system {
+  key   String @id @default("") @db.VarChar(20)
+  value String @default("") @db.VarChar(255)
+}
+
+model event_location {
+  id             Int     @id @default(autoincrement())
+  name           String  @default("") @db.VarChar(255)
+  common         String? @db.Text
+  plan           String? @db.Text
+  zip            String  @default("") @db.VarChar(10)
+  city           String  @default("") @db.VarChar(255)
+  countrycode    String  @default("") @db.Char(2)
+  street         String  @default("") @db.VarChar(255)
+  common_encode  Int     @default(1)
+  plan_encode    Int     @default(1)
+  map24_link2map String  @default("") @db.VarChar(255)
+}
+
+model event_location_images {
+  id            Int    @id @default(autoincrement())
+  location_id   Int    @default(0)
+  media_id      Int    @default(0)
+  name          String @default("") @db.VarChar(255)
+  display_order Int    @default(0)
+
+  @@index([location_id], map: "location_id")
+}
+
+model event_server {
+  id          Int      @id @default(autoincrement())
+  event_id    Int      @default(0)
+  user_id     Int      @default(0)
+  active      Int      @default(0)
+  name        String   @default("") @db.VarChar(255)
+  description String?  @db.Text
+  gamelist    String   @default("") @db.VarChar(255)
+  server_cpu  String   @default("") @db.VarChar(255)
+  server_mhz  Int      @default(0)
+  server_ram  Int      @default(0)
+  server_hdd  Int      @default(0)
+  ip          String   @default("") @db.VarChar(255)
+  intern      String?  @db.Text
+  dateline    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([event_id, user_id, active], map: "event_id")
+}
+
+model event_sitzgruppen {
+  id        Int    @id @default(autoincrement())
+  name      String @default("") @db.VarChar(255)
+  pass      String @default("") @db.VarChar(255)
+  leader_id Int    @default(0)
+  block_id  Int    @default(0)
+  anzahl    Int    @default(0)
+  closed    Int    @default(0)
+
+  @@index([block_id], map: "block_id")
+  @@index([leader_id], map: "leader_id")
+}
+
+model event_sitzplan {
+  id           Int    @id @default(autoincrement())
+  event_id     Int?   @default(0)
+  active       Int    @default(0)
+  rows         Int    @default(0)
+  cols         Int    @default(0)
+  dir          Int    @default(0)
+  autonr       Int    @default(1)
+  name         String @default("0") @db.VarChar(255)
+  allow_groups Int    @default(0)
+
+  @@index([active], map: "active")
+  @@index([event_id], map: "event_id")
+}
+
+model event_sitzplatz {
+  id     Int     @id @default(autoincrement())
+  block  Int     @default(0)
+  row    Int     @default(0)
+  col    Int     @default(0)
+  type   Int     @default(0)
+  status Int     @default(0)
+  grp    String? @db.VarChar(255)
+  nr     Int?
+  etid   Int?    @default(0)
+
+  @@index([block], map: "block")
+  @@index([status], map: "status")
+  @@index([type], map: "type")
+}
+
+model event_status {
+  id            Int    @id @default(autoincrement())
+  status        String @default("") @db.VarChar(50)
+  status_extern String @default("") @db.VarChar(50)
+  bezahlt       Int    @default(0)
+}
+
+model event_teilnehmer {
+  id               Int      @id @default(autoincrement())
+  event_id         Int      @default(0)
+  user_id          Int      @default(0)
+  user_status      Int      @default(0)
+  bezahlt          Int      @default(0)
+  zahl_typ         Int      @default(1)
+  sitz_nr          String   @default("") @db.VarChar(50)
+  sitz_id          Int      @default(0)
+  sitz_block       Int      @default(0)
+  anwesend         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  ip               String   @default("") @db.VarChar(40)
+  joinevent        Int?
+  payday           Int      @default(0)
+  group_id         Int      @default(0)
+  group_sort_order Int      @default(0)
+  comment          String?  @db.Text
 
   @@index([bezahlt], map: "bezahlt")
   @@index([event_id], map: "event_id")
+  @@index([group_id], map: "group_id")
   @@index([user_id], map: "user_id")
-  @@ignore
+  @@index([zahl_typ], map: "zahl_typ")
+}
+
+model event_voucher {
+  key               String   @id @db.VarChar(255)
+  event_id          Int
+  zahl_typ          Int      @default(10)
+  category          String   @db.VarChar(255)
+  activation_date   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  expiry_date       DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  generated_date    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  generated_user_id Int
+  used_date         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  used_user_id      Int?
+
+  @@index([event_id, category], map: "event2category")
+  @@index([event_id], map: "event_id")
+  @@index([used_date], map: "used_date")
+}
+
+model events {
+  id               Int      @id @default(autoincrement())
+  active           Int      @default(0)
+  invite           Int      @default(0)
+  password         String   @default("") @db.VarChar(255)
+  name             String   @default("") @db.VarChar(100)
+  anzahl           Int      @default(0)
+  preis            String?  @db.Text
+  konto            String?  @db.Text
+  kontocheck       DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  begin            DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  end              DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  signupbegin      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  signupend        DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  seatreservebegin DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  seatreserveend   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  seatimage        Int      @default(0)
+  location         String   @default("") @db.VarChar(50)
+  voraussetzung    String?  @db.Text
+  minalter         Int      @default(0)
+  turnier          String?  @db.Text
+  netzwerk         String?  @db.Text
+  weiteres         String?  @db.Text
+  banner           String   @default("") @db.VarChar(100)
+  location_id      Int      @default(0)
+  map_template     String   @default("default_de-at-ch") @db.VarChar(255)
+  allow_signoff    Int      @default(1)
+  canceled         DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  lpde_update      Int      @default(0)
+  lpde_partyid     Int      @default(0)
+  lpde_email       String   @default("") @db.VarChar(255)
+  lpde_pass        String   @default("") @db.VarChar(255)
+  lpde_mfz         Int      @default(0)
+  lpde_tickets     Int      @default(0)
+  archiv_media     Int      @default(0)
+  archiv_gallery   Int      @default(0)
+
+  @@index([active], map: "active")
+  @@index([begin], map: "begin")
+  @@index([end], map: "end")
+}
+
+model forum_cat {
+  catid        Int    @id @default(autoincrement())
+  title        String @default("") @db.VarChar(50)
+  description  String @default("") @db.VarChar(255)
+  displayorder Int    @default(0)
+  visible      Int    @default(1)
+}
+
+model forum_files {
+  id           Int      @id @default(autoincrement())
+  filename     String   @default("") @db.VarChar(255)
+  filetype     String   @default("") @db.VarChar(255)
+  filesize     String   @default("") @db.VarChar(11)
+  filesavename String   @default("") @db.VarChar(255)
+  dateline     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  user_id      Int      @default(0)
+}
+
+model forum_main {
+  forumid      Int       @id @default(autoincrement()) @db.UnsignedSmallInt
+  catid        Int       @default(0)
+  title        String    @default("") @db.VarChar(100)
+  description  String    @default("") @db.VarChar(250)
+  active       Int       @default(0) @db.SmallInt
+  closed       Int       @default(0)
+  show_latest  Int       @default(1)
+  displayorder Int       @default(0) @db.SmallInt
+  lastposttime DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  lastposter   String    @default("") @db.VarChar(50)
+  threads      Int       @default(0)
+  posts        Int       @default(0)
+  moderators   String?   @db.Text
+  private      Int       @default(0)
+  priv_access  String?   @db.Text
+
+  @@index([active], map: "active")
+  @@index([catid], map: "catid")
+  @@index([private], map: "private")
+}
+
+model forum_post {
+  postid        Int      @id @default(autoincrement()) @db.UnsignedInt
+  threadid      Int      @default(0) @db.UnsignedInt
+  userid        Int      @default(0) @db.UnsignedInt
+  dateline      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  pagetext      String?  @db.VarChar(3000)
+  htmltext      String?  @db.Text
+  remoteip      String   @default("") @db.VarChar(16)
+  dnsname       String?  @db.VarChar(50)
+  locked        Int      @default(0)
+  invisible     Int      @default(0)
+  history       String?  @db.Text
+  attachment_id Int      @default(0)
+  notify        Int      @default(0)
+  quoteid       Int      @default(0)
+  edited        DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  edit_user_id  Int      @default(0)
+
+  @@index([attachment_id], map: "attachment_id")
+  @@index([dateline], map: "dateline")
+  @@index([invisible], map: "invisible")
+  @@index([notify], map: "notify")
+  @@index([pagetext], map: "pagetext")
+  @@index([threadid], map: "threadid")
+  @@index([userid], map: "userid")
+}
+
+model forum_thread {
+  threadid     Int              @id @default(autoincrement()) @db.UnsignedInt
+  title        String           @default("") @db.VarChar(100)
+  forumid      Int              @default(0) @db.UnsignedSmallInt
+  closed       Int              @default(0)
+  invisible    Int              @default(0)
+  show_latest  Int              @default(1)
+  sticky       Int              @default(0)
+  user_id      Int              @default(0)
+  firstposter  String           @default("") @db.VarChar(50)
+  lastposter   String           @default("") @db.VarChar(50)
+  lastposttime DateTime         @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  replies      Int              @default(0)
+  hits         Int              @default(0)
+  fv_id        Int              @default(0)
+  ext          forum_thread_ext @default(EMPTY_ENUM_VALUE)
+  ext_id       Int              @default(0)
+
+  @@index([ext], map: "ext")
+  @@index([ext_id], map: "ext_id")
+  @@index([forumid], map: "forumid")
+  @@index([invisible], map: "invisible")
+  @@index([lastposttime], map: "lastposttime")
+  @@index([sticky], map: "sticky")
+  @@index([user_id], map: "user_id")
+}
+
+model forum_visit_forum {
+  user_id  Int
+  forumid  Int
+  dateline DateTime @db.DateTime(0)
+
+  @@id([user_id, forumid])
+}
+
+model forum_visit_thread {
+  user_id  Int
+  threadid Int
+  forumid  Int
+  dateline DateTime @db.DateTime(0)
+
+  @@id([user_id, threadid])
+  @@index([user_id, forumid], map: "user-forum")
+}
+
+model forum_vote {
+  fv_id       Int      @id @default(autoincrement())
+  fv_question String   @default("") @db.VarChar(255)
+  fv_dateline DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  fv_choices  String?  @db.Text
+  fv_userid   Int      @default(0)
+  fv_closed   Int      @default(0)
+  fv_timeout  Int      @default(0)
+
+  @@index([fv_dateline], map: "fv_dateline")
+}
+
+model forum_voted {
+  fvd_id      Int      @id @default(autoincrement())
+  fv_id       Int      @default(0)
+  fv_choice   Int      @default(0)
+  fvd_userid  Int      @default(0)
+  fv_dateline DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  sessionhash String   @default("") @db.VarChar(255)
+  ip          String   @default("") @db.VarChar(15)
+  dns         String   @default("") @db.VarChar(255)
+
+  @@index([fv_choice], map: "fv_choice")
+  @@index([fv_dateline], map: "fv_dateline")
+  @@index([fv_id], map: "fv_id")
+  @@index([fvd_userid], map: "fvd_userid")
+}
+
+model gallery {
+  id            Int      @id @default(autoincrement())
+  parent_id     Int      @default(0)
+  level         Int      @default(0)
+  children      Int      @default(0)
+  is_dir        Int      @default(0)
+  name          String   @default("") @db.VarChar(255)
+  description   String?  @db.Text
+  dateline      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  archive_name  String   @default("") @db.VarChar(50)
+  user_id       Int      @default(0)
+  preview_image Int      @default(0)
+  cols          Int      @default(0)
+  active        Int      @default(0)
+  ip            String   @default("") @db.VarChar(15)
+  viewed        Int      @default(0)
+  zipfiles      String?  @db.Text
+
+  @@index([active], map: "active")
+  @@index([archive_name], map: "archive_name")
+  @@index([is_dir], map: "is_dir")
+  @@index([parent_id], map: "parent_id")
+}
+
+model gallery_images {
+  id            Int    @id @default(autoincrement())
+  gallery_id    Int    @default(0)
+  file_image    String @default("") @db.VarChar(50)
+  file_thumb    String @default("") @db.VarChar(50)
+  info_image    String @default("") @db.VarChar(50)
+  info_thumb    String @default("") @db.VarChar(50)
+  filesize      Int    @default(0)
+  thumbsize     Int    @default(0)
+  display_order Int    @default(0)
+  description   String @default("") @db.VarChar(255)
+  image_nr      Int    @default(0)
+  viewed        Int    @default(0)
+  comments      Int    @default(0)
+  deleted       Int    @default(0)
+
+  @@index([deleted], map: "deleted")
+  @@index([gallery_id], map: "gallery_id")
+}
+
+model geodata {
+  id          Int    @id @default(autoincrement())
+  countrycode String @default("") @db.Char(2)
+  zip         String @default("") @db.VarChar(10)
+  city        String @default("") @db.VarChar(255)
+  district    String @default("") @db.VarChar(255)
+  lon         Float  @default(0)
+  lat         Float  @default(0)
+
+  @@index([city], map: "city")
+  @@index([countrycode], map: "countrycode")
+  @@index([zip], map: "zip")
+}
+
+model groupware_todo {
+  td_id          Int       @id @default(autoincrement())
+  td_title       String    @default("") @db.VarChar(255)
+  td_description String?   @db.Text
+  td_user_id     Int       @default(0)
+  td_prio        Int       @default(2)
+  td_status      Int       @default(0)
+  td_erledigt    Int       @default(0)
+  td_deadline    DateTime? @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  td_date        DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  td_lastwork    DateTime  @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  td_lastworker  Int       @default(0)
+  td_group_id    Int       @default(0)
+
+  @@index([td_group_id], map: "group_id")
+  @@index([td_user_id], map: "user_id")
+}
+
+model html_code {
+  codeid          Int    @id @default(autoincrement()) @db.UnsignedSmallInt
+  codetag         String @default("") @db.VarChar(200)
+  codereplacement String @default("") @db.VarChar(200)
+  codeexample     String @default("") @db.VarChar(200)
+  codeexplanation String @db.MediumText
+  twoparams       Int    @default(0) @db.SmallInt
+  displayorder    Int    @default(0)
+}
+
+model html_smilies {
+  id    BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+  code  String @default("") @db.Char(100)
+  smily String @default("") @db.Char(255)
+}
+
+model mail_content {
+  id            Int      @id @default(autoincrement())
+  subject       String   @default("") @db.VarChar(255)
+  body          String?  @db.Text
+  send          Int      @default(0)
+  user_id       Int      @default(0)
+  group_id      Int      @default(0)
+  dateline      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  dateline_send DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([group_id], map: "group_id")
+  @@index([user_id], map: "user_id")
+}
+
+model mail_groups {
+  id           Int      @id @default(autoincrement())
+  name         String   @default("") @db.VarChar(255)
+  dateline     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  user_id      Int      @default(0)
+  type         Int      @default(0)
+  event_id     Int      @default(0)
+  event_status Int      @default(0)
+  group_id     Int      @default(0)
+
+  @@index([event_id], map: "event_id")
+  @@index([group_id], map: "group_id")
+  @@index([type], map: "type")
+}
+
+model mail_queue {
+  id           Int      @id @default(autoincrement())
+  mail_id      Int
+  subject      String   @db.VarChar(255)
+  body         String?  @db.Text
+  email        String   @db.VarChar(255)
+  username     String   @db.VarChar(255)
+  ishtml       Int      @default(0)
+  status       Int      @default(0)
+  lastmodified DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([mail_id], map: "mail_id")
+  @@index([status], map: "status")
+}
+
+model news_post {
+  id           Int      @id @default(autoincrement())
+  section_id   Int      @default(0)
+  headline     String?  @db.VarChar(100)
+  content      String?  @db.VarChar(3000)
+  short        String   @default("") @db.VarChar(255)
+  user_id      Int?
+  generator_id Int      @default(0)
+  dateline     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  active       Int      @default(0)
+  edited       DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  edituser     Int      @default(0)
+  encode       Int      @default(1)
+  comments     Int      @default(0)
+  intern       String?  @db.Text
+
+  @@index([active], map: "active")
+  @@index([content], map: "content")
+  @@index([section_id], map: "section_id")
+}
+
+model news_section {
+  id       Int     @id @default(autoincrement())
+  name     String  @default("") @db.VarChar(255)
+  short    String  @default("") @db.VarChar(255)
+  urlshort String  @default("") @db.VarChar(255)
+  intro    String? @db.Text
+  template String  @default("") @db.VarChar(255)
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__bookmark {
+  id    Int    @id @default(autoincrement())
+  dbase String @default("") @db.VarChar(255)
+  user  String @default("") @db.VarChar(255)
+  label String @default("") @db.VarChar(255)
+  query String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__column_info {
+  id                     Int    @id @default(autoincrement()) @db.UnsignedInt
+  db_name                String @default("") @db.VarChar(64)
+  table_name             String @default("") @db.VarChar(64)
+  column_name            String @default("") @db.VarChar(64)
+  comment                String @default("") @db.VarChar(255)
+  mimetype               String @default("") @db.VarChar(255)
+  transformation         String @default("") @db.VarChar(255)
+  transformation_options String @default("") @db.VarChar(255)
+
+  @@unique([db_name, table_name, column_name], map: "db_name")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__designer_coords {
+  db_name    String @default("") @db.VarChar(64)
+  table_name String @default("") @db.VarChar(64)
+  x          Int?
+  y          Int?
+  v          Int?   @db.TinyInt
+  h          Int?   @db.TinyInt
+
+  @@id([db_name, table_name])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__favorite {
+  username String @id @db.VarChar(64)
+  tables   String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__history {
+  id        BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  username  String   @default("") @db.VarChar(64)
+  db        String   @default("") @db.VarChar(64)
+  table     String   @default("") @db.VarChar(64)
+  timevalue DateTime @default(now()) @db.Timestamp(0)
+  sqlquery  String   @db.Text
+
+  @@index([username, db, table, timevalue], map: "username")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__navigationhiding {
+  username   String @db.VarChar(64)
+  item_name  String @db.VarChar(64)
+  item_type  String @db.VarChar(64)
+  db_name    String @db.VarChar(64)
+  table_name String @db.VarChar(64)
+
+  @@id([username, item_name, item_type, db_name, table_name])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__pdf_pages {
+  db_name    String @default("") @db.VarChar(64)
+  page_nr    Int    @id @default(autoincrement()) @db.UnsignedInt
+  page_descr String @default("") @db.VarChar(50)
+
+  @@index([db_name], map: "db_name")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__recent {
+  username String @id @db.VarChar(64)
+  tables   String @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__relation {
+  master_db     String @default("") @db.VarChar(64)
+  master_table  String @default("") @db.VarChar(64)
+  master_field  String @default("") @db.VarChar(64)
+  foreign_db    String @default("") @db.VarChar(64)
+  foreign_table String @default("") @db.VarChar(64)
+  foreign_field String @default("") @db.VarChar(64)
+
+  @@id([master_db, master_table, master_field])
+  @@index([foreign_db, foreign_table], map: "foreign_field")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__savedsearches {
+  id          Int    @id @default(autoincrement()) @db.UnsignedInt
+  username    String @default("") @db.VarChar(64)
+  db_name     String @default("") @db.VarChar(64)
+  search_name String @default("") @db.VarChar(64)
+  search_data String @db.Text
+
+  @@unique([username, db_name, search_name], map: "u_savedsearches_username_dbname")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__table_coords {
+  db_name         String @default("") @db.VarChar(64)
+  table_name      String @default("") @db.VarChar(64)
+  pdf_page_number Int    @default(0)
+  x               Float  @default(0) @db.Float
+  y               Float  @default(0) @db.Float
+
+  @@id([db_name, table_name, pdf_page_number])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__table_info {
+  db_name       String @default("") @db.VarChar(64)
+  table_name    String @default("") @db.VarChar(64)
+  display_field String @default("") @db.VarChar(64)
+
+  @@id([db_name, table_name])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__table_uiprefs {
+  username    String   @db.VarChar(64)
+  db_name     String   @db.VarChar(64)
+  table_name  String   @db.VarChar(64)
+  prefs       String   @db.Text
+  last_update DateTime @default(now()) @db.Timestamp(0)
+
+  @@id([username, db_name, table_name])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__tracking {
+  db_name         String   @db.VarChar(64)
+  table_name      String   @db.VarChar(64)
+  version         Int      @db.UnsignedInt
+  date_created    DateTime @db.DateTime(0)
+  date_updated    DateTime @db.DateTime(0)
+  schema_snapshot String   @db.Text
+  schema_sql      String?  @db.Text
+  data_sql        String?  @db.LongText
+  tracking        String?
+  tracking_active Int      @default(1) @db.UnsignedInt
+
+  @@id([db_name, table_name, version])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__userconfig {
+  username    String   @id @db.VarChar(64)
+  timevalue   DateTime @default(now()) @db.Timestamp(0)
+  config_data String   @db.Text
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__usergroups {
+  usergroup String                  @db.VarChar(64)
+  tab       String                  @db.VarChar(64)
+  allowed   pma__usergroups_allowed @default(N)
+
+  @@id([usergroup, tab, allowed])
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model pma__users {
+  username  String @db.VarChar(64)
+  usergroup String @db.VarChar(64)
+
+  @@id([username, usergroup])
+}
+
+model private_buddylist {
+  user_id  Int @default(0)
+  buddy_id Int @default(0)
+
+  @@id([user_id, buddy_id])
+}
+
+model private_message {
+  pmid        Int      @id @default(autoincrement()) @db.UnsignedInt
+  folder      String   @default("0") @db.VarChar(255)
+  userid      Int      @default(0) @db.UnsignedInt
+  touserid    Int      @default(0) @db.UnsignedInt
+  fromuserid  Int      @default(0) @db.UnsignedInt
+  subject     String   @default("") @db.VarChar(255)
+  message     String   @db.MediumText
+  dateline    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  messageread Int      @default(0) @db.SmallInt
+  confirmread Int      @default(0) @db.SmallInt
+
+  @@index([folder], map: "folder")
+  @@index([messageread], map: "messageread")
+  @@index([userid], map: "userid")
+}
+
+model session {
+  hash         String @id @default("") @db.VarChar(32)
+  userid       Int    @default(0)
+  nick         String @default("") @db.VarChar(255)
+  host         String @default("") @db.VarChar(50)
+  dns          String @default("") @db.VarChar(255)
+  site         String @default("") @db.VarChar(255)
+  referer      String @default("") @db.VarChar(255)
+  useragent    String @default("") @db.VarChar(255)
+  lastactivity Int    @default(0)
+  hits         Int    @default(0)
+  countrycode  String @default("") @db.Char(2)
+
+  @@index([lastactivity], map: "lastactivity")
+  @@index([userid], map: "userid")
+}
+
+model sponsoren {
+  id            Int            @id @default(autoincrement())
+  group_id      Int
+  title         String         @default("") @db.VarChar(255)
+  description   String?        @db.Text
+  homepage      String         @default("") @db.VarChar(255)
+  type          sponsoren_type @default(image)
+  content       String         @db.Text
+  height        Int            @default(0)
+  width         Int            @default(0)
+  display_order Int            @default(0)
+  hits          Int            @default(0)
+  views         Int            @default(0)
+  active        Int            @default(0)
+  restricted    Int            @default(0)
+  maxviews      Int            @default(0)
+  begin         DateTime       @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  end           DateTime       @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  intern        String?        @db.Text
+
+  @@index([group_id, active, maxviews, views, restricted, begin, end], map: "index_banner")
+}
+
+model sponsoren_groups {
+  id            Int    @id @default(autoincrement())
+  name          String @db.VarChar(255)
+  description   String @db.VarChar(255)
+  active        Int
+  sponsorenpage Int
+  display_order Int
+
+  @@index([active, sponsorenpage], map: "index_sponsoren_groups")
 }
 
 model t_contest {
@@ -52,6 +947,48 @@ model t_contest {
   @@index([won], map: "won")
 }
 
+model t_groups {
+  id      Int    @id @default(autoincrement())
+  active  Int    @default(1)
+  name    String @default("") @db.VarChar(255)
+  options Int    @default(0)
+
+  @@index([active], map: "active")
+}
+
+model t_ligasupport {
+  tid  Int
+  liga String @db.VarChar(10)
+  game String @db.VarChar(255)
+
+  @@id([tid, liga, game])
+}
+
+model t_media {
+  id           Int      @id @default(autoincrement())
+  tcid         Int      @default(0)
+  description  String   @default("") @db.VarChar(255)
+  user_id      Int      @default(0)
+  dateline     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  counter      Int      @default(0)
+  filesavename String   @default("") @db.VarChar(255)
+  filename     String   @default("") @db.VarChar(255)
+  filesize     Int      @default(0)
+  filetype     String   @default("") @db.VarChar(255)
+  ip           String   @default("") @db.VarChar(15)
+  dns          String   @default("") @db.VarChar(50)
+
+  @@index([tcid], map: "tcid")
+}
+
+model t_seeding {
+  tid  Int @default(0)
+  pos  Int @default(0)
+  tnid Int @default(0)
+
+  @@id([tid, pos])
+}
+
 model t_teilnehmer {
   tnid        Int     @id @default(autoincrement())
   tid         Int     @default(0)
@@ -79,15 +1016,6 @@ model t_teilnehmer_part {
   dateline DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
 
   @@id([tnid, user_id])
-}
-
-model user {
-  id    Int    @id @default(autoincrement())
-  nick  String @default("") @db.VarChar(50)
-  email String @db.VarChar(255)
-
-  @@index([email], map: "email")
-  @@index([nick], map: "nick")
 }
 
 model t_turnier {
@@ -134,4 +1062,188 @@ model t_turnier {
   c_round               String?  @db.VarChar(11)
 
   @@index([tactive], map: "tactive")
+}
+
+model user {
+  id                  Int      @id @default(autoincrement())
+  nick                String   @default("") @db.VarChar(50)
+  passwort            String   @db.VarChar(255)
+  clan                String   @db.VarChar(255)
+  clantag             String   @default("") @db.VarChar(50)
+  vorname             String   @db.VarChar(255)
+  nachname            String   @db.VarChar(255)
+  strasse             String?  @db.VarChar(255)
+  plz                 String   @default("") @db.VarChar(10)
+  wohnort             String?  @db.VarChar(255)
+  countrycode         String   @default("") @db.Char(2)
+  telefon             String?  @db.VarChar(255)
+  handy               String?  @db.VarChar(255)
+  fax                 String?  @db.VarChar(255)
+  geb                 DateTime @default(dbgenerated("('1970-01-01')")) @db.Date
+  email               String   @db.VarChar(255)
+  newsletter          Int      @default(1)
+  female              Int      @default(0)
+  icquin              String   @default("") @db.VarChar(255)
+  skype               String   @default("") @db.VarChar(255)
+  jabber              String   @default("") @db.VarChar(255)
+  msn                 String   @default("") @db.VarChar(255)
+  yahoo               String   @default("") @db.VarChar(255)
+  aim                 String   @default("") @db.VarChar(255)
+  googletalk          String   @default("") @db.VarChar(255)
+  homepage            String   @default("") @db.VarChar(255)
+  motto               String?  @db.Text
+  ver_age             Int      @default(0)
+  kommentar           String?  @db.Text
+  joinus              Int      @default(0)
+  ver_email           Int      @default(0)
+  ver_salt            String?  @db.Char(8)
+  lastpost            Int      @default(0)
+  lastgetpasswd       Int      @default(0)
+  style               String   @default("") @db.VarChar(50)
+  lastactivity        DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  lastupdate          Int      @default(0)
+  last_ip             String?  @db.MediumText
+  lastvisit_forum     Int      @default(0)
+  lastvisit_groupware Int      @default(0)
+  settings            String?  @db.Text
+  avatar              Int      @default(0)
+  avatar_name         String   @default("") @db.VarChar(255)
+  wwclid              String   @default("") @db.VarChar(20)
+  wwclclanid          String   @default("") @db.VarChar(20)
+  nglid               String   @default("") @db.VarChar(20)
+  nglclanid           String   @default("") @db.VarChar(20)
+  lgzid               String   @default("") @db.VarChar(20)
+  lgzclanid           String   @default("") @db.VarChar(20)
+  eamid               String   @default("") @db.VarChar(20)
+  eamclanid           String   @default("") @db.VarChar(20)
+  external_id         String   @default("") @db.VarChar(255)
+  external_info       String?  @db.Text
+  stats_postings      Int      @default(0)
+  stats_comments      Int      @default(0)
+  stats_messages_recv Int      @default(0)
+  stats_messages_sent Int      @default(0)
+  stats_sessions      Int      @default(0)
+  stats_hits          Int      @default(0)
+  stats_profile_hits  Int      @default(0)
+
+  @@index([email], map: "email")
+  @@index([external_id], map: "external_id")
+  @@index([newsletter], map: "newsletter")
+  @@index([nick], map: "nick")
+  @@index([ver_email], map: "ver_email")
+}
+
+model user_g2u {
+  group_id Int @default(0)
+  user_id  Int @default(0)
+
+  @@id([group_id, user_id])
+  @@index([group_id], map: "group_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_groups {
+  id   Int    @id @default(autoincrement())
+  name String @default("") @db.VarChar(255)
+}
+
+model user_log {
+  id          Int      @id @default(autoincrement())
+  user_id     Int      @default(0)
+  nick        String?  @db.VarChar(50)
+  section     String   @default("") @db.VarChar(50)
+  action      String   @default("") @db.VarChar(255)
+  target      String   @default("") @db.VarChar(255)
+  optional    String?  @db.LongText
+  ip          String   @default("") @db.VarChar(40)
+  dns         String   @default("") @db.VarChar(255)
+  useragent   String   @default("") @db.VarChar(255)
+  sessionhash String   @default("") @db.VarChar(32)
+  timestamp   DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  url         String   @default("") @db.VarChar(255)
+
+  @@index([action], map: "action")
+  @@index([section], map: "section")
+  @@index([user_id], map: "user_id")
+}
+
+model user_orga {
+  id            Int    @id @default(autoincrement())
+  user_id       Int    @default(0)
+  funktion      String @default("") @db.VarChar(255)
+  team_forum    Int    @default(0)
+  display_team  Int    @default(0)
+  group_id      Int    @default(0)
+  display_order Int    @default(0)
+  rights        Int    @default(0)
+
+  @@index([group_id], map: "group_id")
+  @@index([user_id], map: "user_id")
+}
+
+model user_orgagroups {
+  id            Int    @id @default(autoincrement())
+  name          String @default("") @db.VarChar(255)
+  display_order Int    @default(0)
+}
+
+model vote_choice {
+  vc_id         Int    @id @default(autoincrement())
+  v_id          Int    @default(0)
+  vc_choice     String @default("") @db.VarChar(255)
+  display_order Int    @default(0)
+}
+
+model vote_main {
+  v_id       Int      @id @default(autoincrement())
+  v_active   Int      @default(0)
+  v_question String   @default("") @db.VarChar(255)
+  v_start    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  v_ende     DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+  v_multi    Int      @default(0)
+  v_multimax Int      @default(0)
+  v_top      Int      @default(1)
+  v_public   Int      @default(1)
+  v_event_id Int      @default(0)
+
+  @@index([v_top], map: "v_top")
+}
+
+model vote_voted {
+  vd_id       Int      @id @default(autoincrement())
+  v_id        Int      @default(0)
+  vc_id       Int      @default(0)
+  sessionhash String   @default("") @db.VarChar(255)
+  ip          String   @default("") @db.VarChar(15)
+  dns         String   @default("") @db.VarChar(100)
+  user_id     Int      @default(0)
+  dateline    DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
+
+  @@index([v_id], map: "v_id")
+}
+
+enum pma__usergroups_allowed {
+  Y
+  N
+}
+
+enum sponsoren_type {
+  image
+  flash
+  html
+}
+
+enum forum_thread_ext {
+  EMPTY_ENUM_VALUE @map("")
+  news
+  artikel
+  turnier
+  gallery
+  media
+}
+
+enum cms_media_access {
+  public
+  user
+  secret
 }

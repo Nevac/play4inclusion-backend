@@ -1,13 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="added env template">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="added null handling for score">
+      <change afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/routes/auth.ts" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" afterPath="$PROJECT_DIR$/app.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/score.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/score.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/tournament.js" beforeDir="false" afterPath="$PROJECT_DIR$/routes/tournament.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/score.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/score.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,28 +47,46 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 3
+}]]></component>
   <component name="ProjectId" id="2EDOnvJab6tlandCtC9SiyjDY4o" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="go.format.on.save.advertiser.fired" value="true" />
-    <property name="go.formatter.settings.were.checked" value="true" />
-    <property name="go.import.settings.migrated" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\IntelliJ IDEA 2021.3.1\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
-  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.go.formatter.settings.were.checked": "true",
+    "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "go.import.settings.migrated": "true",
+    "kotlin-language-version-configured": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "yarn",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Users\\Cagatay\\Documents\\Projects\\freelance\\Play4Inclusion\\play4inclusion-bakcend\\node_modules\\typescript\\lib",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend" />
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\routes" />
     </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src" />
+    </key>
+  </component>
+  <component name="RunAnythingCache">
+    <option name="myCommands">
+      <command value="PrismaClient" />
+    </option>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -80,7 +107,18 @@
       <workItem from="1676900809648" duration="17945000" />
       <workItem from="1677076450763" duration="7739000" />
       <workItem from="1677171173692" duration="1426000" />
-      <workItem from="1677202706707" duration="4936000" />
+      <workItem from="1677202706707" duration="5657000" />
+      <workItem from="1677262247879" duration="45000" />
+      <workItem from="1677262303671" duration="19000" />
+      <workItem from="1677262333720" duration="20000" />
+      <workItem from="1677262384662" duration="1640000" />
+      <workItem from="1677715221117" duration="20000" />
+      <workItem from="1702346309170" duration="4478000" />
+      <workItem from="1702404415478" duration="1836000" />
+      <workItem from="1702475287534" duration="617000" />
+      <workItem from="1702927466317" duration="4208000" />
+      <workItem from="1702931794219" duration="1977000" />
+      <workItem from="1702937787534" duration="7149000" />
     </task>
     <task id="LOCAL-00001" summary="updated backend to be more integrated with lock and load databases">
       <created>1675785788401</created>
@@ -117,7 +155,21 @@
       <option name="project" value="LOCAL" />
       <updated>1677238906628</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="added tournament endpoint">
+      <created>1677241945566</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1677241945566</updated>
+    </task>
+    <task id="LOCAL-00007" summary="added null handling for score">
+      <created>1677262790246</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1677262790247</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -152,9 +204,11 @@
     <MESSAGE value="polishing and bug fixing" />
     <MESSAGE value="restructured project" />
     <MESSAGE value="added env template" />
-    <option name="LAST_COMMIT_MESSAGE" value="added env template" />
+    <MESSAGE value="added tournament endpoint" />
+    <MESSAGE value="added null handling for score" />
+    <option name="LAST_COMMIT_MESSAGE" value="added null handling for score" />
   </component>
   <component name="VgoProject">
-    <integration-enabled>true</integration-enabled>
+    <settings-migrated>true</settings-migrated>
   </component>
 </project>
