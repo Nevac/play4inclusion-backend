@@ -4,19 +4,21 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="added null handling for score">
-      <change afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/routes/auth.ts" afterDir="false" />
+    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="changed project to typescript and added auth">
+      <change afterPath="$PROJECT_DIR$/src/routes/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/www" beforeDir="false" afterPath="$PROJECT_DIR$/bin/www" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/index.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/index.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/score.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/score.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/routes/tournament.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/score.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/tournament.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/error.pug" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/index.pug" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/layout.pug" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/random.pug" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -47,9 +49,9 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 3
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 3
+}</component>
   <component name="ProjectId" id="2EDOnvJab6tlandCtC9SiyjDY4o" />
   <component name="ProjectViewState">
     <option name="autoscrollFromSource" value="true" />
@@ -63,6 +65,7 @@
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/Cagatay/Documents/Projects/freelance/Play4Inclusion/play4inclusion-bakcend/src/routes",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -75,6 +78,7 @@
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes" />
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend" />
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\routes" />
     </key>
@@ -118,7 +122,8 @@
       <workItem from="1702475287534" duration="617000" />
       <workItem from="1702927466317" duration="4208000" />
       <workItem from="1702931794219" duration="1977000" />
-      <workItem from="1702937787534" duration="7149000" />
+      <workItem from="1702937787534" duration="14827000" />
+      <workItem from="1703002451472" duration="15756000" />
     </task>
     <task id="LOCAL-00001" summary="updated backend to be more integrated with lock and load databases">
       <created>1675785788401</created>
@@ -169,7 +174,15 @@
       <option name="project" value="LOCAL" />
       <updated>1677262790247</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="changed project to typescript and added auth">
+      <option name="closed" value="true" />
+      <created>1702947349506</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1702947349507</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -206,7 +219,8 @@
     <MESSAGE value="added env template" />
     <MESSAGE value="added tournament endpoint" />
     <MESSAGE value="added null handling for score" />
-    <option name="LAST_COMMIT_MESSAGE" value="added null handling for score" />
+    <MESSAGE value="changed project to typescript and added auth" />
+    <option name="LAST_COMMIT_MESSAGE" value="changed project to typescript and added auth" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>

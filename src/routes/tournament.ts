@@ -21,10 +21,26 @@ router.get('/score', async (req, res) => {
       }
     }
   }
-
-
   res.send(responseBody);
 })
+
+router.put('/score', async (req, res) => {
+  const scoreJson = req.body;
+  const user = await getUser(scoreJson.email);
+
+  if(user && await checkIfUserIsLanParticipant(user)) {
+    let isTLive = await isTournamentLive();
+
+    if(isTLive) {
+      console.info("User is participant");
+      await handleScore(scoreJson, user, res);
+    } else {
+      tournamentNotLiveResponse(res);
+    }
+  } else {
+    userNotFoundResponse(res);
+  }
+});
 
 router.get('/highscore', async (req, res) => {
   const email = req.query.email;
@@ -48,36 +64,7 @@ router.get('/highscore', async (req, res) => {
   userNotFoundResponse(res)
 })
 
-router.put('/score', async (req, res) => {
-  const scoreJson = req.body;
-  const user = await getUser(scoreJson.email);
-
-  if(user && await checkIfUserIsLanParticipant(user)) {
-    let isTLive = await isTournamentLive();
-
-    if(isTLive) {
-      console.info("User is participant");
-      await handleScore(scoreJson, user, res);
-    } else {
-      tournamentNotLiveResponse(res);
-    }
-  } else {
-    userNotFoundResponse(res);
-  }
-});
-
-router.put('/user', async (req, res) => {
-  const inputJson = req.body;
-  const user = await getUser(inputJson.email);
-
-  if(user && await checkIfUserIsLanParticipant(user)) {
-    res.send(user);
-  } else {
-    userNotFoundResponse(res);
-  }
-});
-
-router.get('/tournament', async (req, res) => {
+router.get('/status', async (req, res) => {
 
   if(await isTournamentLive()) {
     res.send({ tournamentState: "open"});
@@ -417,53 +404,11 @@ async function isTournamentLive() {
   return tournament.tactive === 1 && tournament.tclosed === 0;
 }
 
-// catch 404 and forward to error handler
-router.use(function(req, res, next) {
-  next(createError(404));
-});
-
-// error handler
-router.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
-
-  // render the error page
-  res.status(err.status || 500);
-  res.send('error');
-});
-
 function getHashString(scoreJson) {
   const scoreHash = parseInt(scoreJson.score) * 2896;
   const mailHash = scoreJson.email.split("@")[0] + "|" + scoreJson.score * 2;
 
   return scoreHash + mailHash;
 }
-
-var passport = require('passport');
-var LocalStrategy = require('passport-local');
-var md5 = require('md5');
-
-passport.use(new LocalStrategy(async function verify(email, password, cb) {
-
-  const user = await prisma.user.findFirst({
-    where: {
-      email: email,
-      passwort: md5(password)
-    }
-  });
-
-  if(user) {
-    return cb(null, user)
-  }
-
-  return cb(null, false, { message: 'loginFailed'})
-}));
-
-router.post('/login', passport.authenticate('local',
-    {
-      successRedirect: '/',
-      failureRedirect: '/login'
-    }));
 
 export default router;

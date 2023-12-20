@@ -1,6 +1,6 @@
 generator client {
   provider        = "prisma-client-js"
-  previewFeatures = ["fullTextSearch", "fullTextIndex"]
+  previewFeatures = ["fullTextIndex", "fullTextSearch"]
 }
 
 datasource db {
@@ -16,7 +16,7 @@ model article {
   generator_id     Int      @default(0)
   display_teamname Int      @default(0)
   title            String   @default("") @db.VarChar(255)
-  content          String?  @db.VarChar(3000)
+  content          String?  @db.LongText
   encode           Int      @default(0)
   readonly         Int      @default(0)
   active           Int      @default(1)
@@ -27,8 +27,8 @@ model article {
   comments         Int      @default(0)
   intern           String?  @db.Text
 
-  @@index([content], map: "content")
   @@index([section_id], map: "section_id")
+  @@fulltext([content], map: "content")
 }
 
 model article_section {
@@ -406,7 +406,7 @@ model forum_post {
   threadid      Int      @default(0) @db.UnsignedInt
   userid        Int      @default(0) @db.UnsignedInt
   dateline      DateTime @default(dbgenerated("('0000-00-00 00:00:00')")) @db.DateTime(0)
-  pagetext      String?  @db.VarChar(3000)
+  pagetext      String?  @db.Text
   htmltext      String?  @db.Text
   remoteip      String   @default("") @db.VarChar(16)
   dnsname       String?  @db.VarChar(50)
@@ -423,9 +423,9 @@ model forum_post {
   @@index([dateline], map: "dateline")
   @@index([invisible], map: "invisible")
   @@index([notify], map: "notify")
-  @@index([pagetext], map: "pagetext")
   @@index([threadid], map: "threadid")
   @@index([userid], map: "userid")
+  @@fulltext([pagetext], map: "pagetext")
 }
 
 model forum_thread {
@@ -641,7 +641,7 @@ model news_post {
   id           Int      @id @default(autoincrement())
   section_id   Int      @default(0)
   headline     String?  @db.VarChar(100)
-  content      String?  @db.VarChar(3000)
+  content      String?  @db.Text
   short        String   @default("") @db.VarChar(255)
   user_id      Int?
   generator_id Int      @default(0)
@@ -654,8 +654,8 @@ model news_post {
   intern       String?  @db.Text
 
   @@index([active], map: "active")
-  @@index([content], map: "content")
   @@index([section_id], map: "section_id")
+  @@fulltext([content], map: "content")
 }
 
 model news_section {
