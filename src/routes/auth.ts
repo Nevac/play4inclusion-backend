@@ -3,6 +3,8 @@ import {PrismaClient, Prisma} from "@prisma/client";
 import express, {Express} from "express";
 import passport from 'passport';
 import {Strategy as LocalStrategy} from 'passport-local';
+import {checkIfUserIsLanParticipant, findUserByEmail} from "../services/user.service";
+import authenticationMiddleware from "../middleware/auth.middleware";
 
 var md5 = require('md5');
 
@@ -72,6 +74,11 @@ function logout(req, res, next) {
         res.status(204);
         res.send();
     });
+}
+
+function userNotFoundResponse(res) {
+    res.status(404);
+    res.send("User not found");
 }
 
 export default router;
