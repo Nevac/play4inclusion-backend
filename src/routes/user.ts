@@ -2,24 +2,14 @@ import express from "express";
 import {PrismaClient} from '@prisma/client';
 import createError from 'http-errors';
 import {checkIfUserIsLanParticipant, findUserByEmail} from "../services/user.service";
-import authenticationMiddleware from "../middleware/auth.middleware";
+import ensureAuthenticated from "../middleware/ensureAuthenticated";
 
 const SHA2 = require("sha2");
 
 const prisma = new PrismaClient();
 const router = express.Router();
-router.put('/', async (req, res) => {
-    const inputJson = req.body;
-    const user = await findUserByEmail(inputJson.email);
 
-    if (user && await checkIfUserIsLanParticipant(user)) {
-        res.send(user);
-    } else {
-        userNotFoundResponse(res);
-    }
-});
-
-router.get('/who', who);
+router.get('/', ensureAuthenticated, who);
 
 async function who(req, res) {
     res.send(req.user);

@@ -12,9 +12,15 @@ import userRouter from "./routes/user";
 import SQLiteSessionInitiator from "connect-sqlite3";
 import passport from "passport";
 import {Database} from "sqlite3";
+import {Strategy as LocalStrategy} from "passport-local";
+import {deserializeUser, serializeUser, verify} from "./services/auth.service";
+import ensureAuthenticated from "./middleware/ensureAuthenticated";
+import buildWebsocketEndpoint from "./websockets/websockets";
+import {Server} from "socket.io";
+import ActiveGameCheckWorker from "./workers/ActiveGameCheckWorker";
 
 const port = process.env.PORT || 3000
-const app: Express = express()
+const app = express();
 const SQLiteStore = SQLiteSessionInitiator(session);
 const dbFileName = ':memory:';
 const db = new Database(dbFileName)
@@ -46,25 +52,42 @@ app.use(winstonLogger({
     } // optional: allows to skip some log messages based on request and/or response
 }));
 
-app.use(session({
+const sessionMiddleware = session({
     secret: 'keyboard cat',
     resave: false,
     saveUninitialized: false,
     cookie: {
-        maxAge: +process.env.AUTH_SESSION_MAX_AGE * 60 * 60 * 1000
+        maxAge: +process.env.AUTH_SESSION_MAX_AGE * 60 * 60 * 1000,
+        secure: false
     },
     store: new SQLiteStore(({db: dbFileName, dir: './var/db'})) as Store
-}))
-app.use(passport.authenticate('session'));
+})
 
-var ensureAuthenticated = function(req, res, next) {
-    if (req.isAuthenticated()) return next();
-    else res.status(401).send('Access denied')
-}
+app.use(sessionMiddleware)
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
+passport.use(new LocalStrategy(
+    {
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+    },
+    verify
+));
+passport.serializeUser(serializeUser);
+passport.deserializeUser(deserializeUser);
 
 app.use('/auth', authRouter);
-app.use(ensureAuthenticated)
 app.use('/tournament', tournamentRouter);
 app.use('/user', userRouter);
+app.use(ensureAuthenticated);
 
-app.listen(port, () => console.log(`[LaL][SPS] Play4Inclusion Server started on ${port}!`))
+const server = app.listen(port, () => console.log(`[LaL][SPS] Play4Inclusion Server started on ${port}!`))
+export const io = new Server(server, {
+    cors: {
+        origin: '*',
+        allowedHeaders: '*'
+    }
+});
+buildWebsocketEndpoint(sessionMiddleware, passport);
+ActiveGameCheckWorker.startInterval(10 * 1000, 20 * 1000);
