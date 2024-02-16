@@ -5,22 +5,39 @@ import {endGame, onReceiveActiveGameResponse, startGame} from "../services/game.
 export default function gameEvents(socket: Socket) {
     socket.on(GameEvent.START, (msg) => {
         console.log('game_start: ' + msg);
-        startGame(socket);
+        try {
+            startGame(socket);
+        } catch (error) {
+            console.log(error);
+        }
     });
 
     socket.on(GameEvent.END, (msg) => {
         console.log('game_end: ' + msg);
-        endGame(socket);
+        try {
+            endGame(socket);
+        } catch (error) {
+            console.log(error);
+        }
     });
 
     socket.on(GameEvent.ALIVE_RESPONSE, (msg) => {
         console.log('game_alive_response: ' + msg);
-        onReceiveActiveGameResponse(socket);
+        try {
+            onReceiveActiveGameResponse(socket);
+        } catch (error) {
+            console.error(error);
+        }
     });
 
     socket.conn.on("close", (msg) => {
         console.log('close: ' + msg);
-        endGame(socket);
+        try {
+            endGame(socket);
+        } catch (error) {
+            console.error(error);
+        }
+
     });
 }
 

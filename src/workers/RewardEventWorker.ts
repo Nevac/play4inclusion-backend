@@ -7,6 +7,8 @@ import Reward from "../domain/reward/Reward";
 import {findRewardsByIds} from "../services/reward.service";
 import GameEvent from "../websockets/GameEvent";
 import {createCateringOrder} from "../services/catering.service";
+import reward from "../routes/reward";
+import rewardEvent from "../routes/rewardEvent";
 
 export default class RewardEventWorker {
 
@@ -32,6 +34,7 @@ export default class RewardEventWorker {
     }
 
     public static async start(rewardEvent: RewardEvent) {
+        console.log(`Reward event with id ${rewardEvent.id} is starting`)
         const worker = new RewardEventWorker(
             rewardEvent,
             this.buildRewardCountMap(rewardEvent),
@@ -40,6 +43,7 @@ export default class RewardEventWorker {
     }
 
     private endEvent() {
+        console.log(`Reward event with id ${this.rewardEvent.id} has ended`)
         this.progressStatus = RewardEventProgress.DONE;
         clearInterval(this.intervalId);
         finishRewardEvent(this.rewardEvent.id);
@@ -73,11 +77,11 @@ export default class RewardEventWorker {
     }
 
     private startChallenge(socketId: string) {
-        console.log('Start challenge socketId: ', socketId);
+        console.log('Start challenge for user ', getUserIdBySocketId(socketId));
         const socket = io.sockets.sockets.get(socketId);
         if(socket) {
             const reward = this.pickRandomReward();
-            const timeoutId = setTimeout(() => this.timeoutCheck(socket, reward), parseInt(process.env.REWARD_TIMEOUT_SECONDS))
+            const timeoutId = setTimeout(() => this.timeoutCheck(socket, reward), parseInt(process.env.REWARD_TIMEOUT_SECONDS) * 1000)
             socket.on(GameEvent.REWARD_WON, () => this.onSessionWin(socket, timeoutId, reward));
             socket.on(GameEvent.REWARD_LOST, () => this.onSessionLost(socket, timeoutId, reward));
             socket.emit(GameEvent.REWARD_ELIGIBLE, {id: reward.id, name: reward.name, iconId: reward.icon_id, duration: parseInt(process.env.REWARD_DURATION_INGAME)});
@@ -85,7 +89,7 @@ export default class RewardEventWorker {
     }
 
     private timeoutCheck(socket: Socket, reward: Reward) {
-        const socketId = socket.id;
+        console.log(`User ${getUserIdBySocketId(socket.id)} has timed out`);
         this.resetChallengeAndPrice(socket, this.timeoutId, reward);
     }
 
@@ -96,14 +100,14 @@ export default class RewardEventWorker {
     ) {
         try {
             clearTimeout(timeoutId);
-            console.log(`SocketId ${socket.id} has won a reward`);
+            console.log(`User ${getUserIdBySocketId(socket.id)} has won a reward`);
             const userId = getUserIdBySocketId(socket.id);
             this.resetChallenge(socket, timeoutId, reward);
             this.winners.add(userId);
             await createCateringOrder(parseInt(userId), reward);
             if(this.calculateTotalPriceAmount() <= 0) {
                 clearTimeout(timeoutId);
-                console.log('no price');
+                console.log('No prices left, ending event');
                 this.endEvent();
             }
         } catch (error) {
@@ -118,7 +122,7 @@ export default class RewardEventWorker {
     ) {
         try {
             clearTimeout(timeoutId);
-            console.log(`SocketId ${socket.id} has lost a reward`);
+            console.log(`User ${getUserIdBySocketId(socket.id)} has lost a reward`);
             this.resetChallengeAndPrice(socket, timeoutId, reward);
         } catch (error) {
             console.log(error);
@@ -147,7 +151,7 @@ export default class RewardEventWorker {
         timeoutId: NodeJS.Timeout,
         reward
     ) {
-        console.log(`SocketId ${socket.id} has timed out`);
+        console.log("Resetting challenge for user" + getUserIdBySocketId(socket.id))
         this.challengers.delete(socket.id);
         socket.off(GameEvent.REWARD_WON, () => this.onSessionWin(socket, timeoutId, reward));
         socket.off(GameEvent.REWARD_LOST, () => this.onSessionLost(socket, timeoutId, reward));
