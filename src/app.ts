@@ -74,7 +74,7 @@ const sessionMiddleware = session({
     resave: false,
     saveUninitialized: true,
     cookie: {
-        sameSite: process.env.HTTPS === "true" ? 'none' : 'strict',
+        sameSite: process.env.HTTPS === 'strict',
         maxAge: +process.env.AUTH_SESSION_MAX_AGE * 60 * 60 * 1000,
         secure: process.env.HTTPS === "true"
     },
