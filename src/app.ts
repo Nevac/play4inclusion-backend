@@ -75,7 +75,7 @@ const sessionMiddleware = session({
     saveUninitialized: true,
     cookie: {
         sameSite: process.env.HTTPS === 'strict',
-        maxAge: +process.env.AUTH_SESSION_MAX_AGE * 60 * 60 * 1000,
+        maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE) * 60 * 60 * 1000,
         secure: process.env.HTTPS === "true"
     },
     store: new SQLiteStore(({db: dbFileName, dir: './var/db'})) as Store
