@@ -6,7 +6,12 @@ export default function setupWebsocket(sessionMiddleware, passport) {
             console.log("ATTEMPT");
             const isHandshake = req._query.sid === undefined;
             if (isHandshake) {
-                middleware(req, res, next);
+                try {
+                    middleware(req, res, next);
+                } catch (error) {
+                    res.writeHead(401);
+                    res.end();
+                }
             } else {
                 next();
             }

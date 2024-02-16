@@ -18,14 +18,6 @@ export default function gameEvents(socket: Socket) {
         onReceiveActiveGameResponse(socket);
     });
 
-    socket.on(GameEvent.REWARD_WON, (msg) => {
-        console.log('game_end: ' + msg);
-    });
-
-    socket.on(GameEvent.REWARD_LOST, (msg) => {
-        console.log('game_reward_win: ' + msg);
-    });
-
     socket.conn.on("close", (msg) => {
         console.log('close: ' + msg);
         endGame(socket);

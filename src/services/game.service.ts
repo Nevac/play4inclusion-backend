@@ -9,7 +9,6 @@ export interface ActivaGameData {
     socketId: string
 }
 export const activeGames = new Map<string, ActivaGameData>();
-export const eligibleGames = new Set<string>();
 const activeGamesRoom: string = 'active_games';
 
 export function startGame(socket: Socket) {
@@ -31,8 +30,13 @@ export function onReceiveActiveGameResponse(socket: Socket) {
     activeGames.get(extractUserId(socket)).lastResponseTime = new Date().getTime();
 }
 
-export function pickEligibleGame() {
-
+export function getUserIdBySocketId(socketId: string) {
+    for(const entry of Array.from(activeGames.entries())) {
+        if(socketId === entry[1].socketId) {
+            return entry[0];
+        }
+    }
+    return '';
 }
 
 function extractUserId(socket: Socket): string {

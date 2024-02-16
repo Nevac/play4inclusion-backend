@@ -15,7 +15,6 @@ export default class ActiveGameCheckWorker {
     }
 
     public async checkActiveGames() {
-        console.log('Check [activeGames]: \n', activeGames);
         const socketsToRemove: Socket[] = [];
         for(const entry of activeGames.entries()) {
             const [userId, activeGameData] = entry;

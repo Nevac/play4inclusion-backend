@@ -1222,6 +1222,27 @@ model vote_voted {
   @@index([v_id], map: "v_id")
 }
 
+model p4i_reward {
+  id      Int    @id @default(autoincrement())
+  name    String @db.VarChar(45)
+  shop_id Int
+  icon_id String @db.VarChar(45)
+}
+
+model p4i_reward_2_reward_event {
+  id              Int @id @default(autoincrement())
+  amount          Int
+  reward_id       Int
+  reward_event_id Int
+}
+
+model p4i_reward_event {
+  id             Int      @id @default(autoincrement())
+  start          DateTime @db.DateTime(0)
+  end            DateTime @db.DateTime(0)
+  progressStatus String   @db.VarChar(45)
+}
+
 enum pma__usergroups_allowed {
   Y
   N

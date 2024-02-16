@@ -38,20 +38,25 @@ async function getScore(req, res) {
 }
 
 async function putScore(req, res) {
-  const scoreJson = req.body;
-  const user = await getUser(scoreJson.email);
+  try {
+    const scoreJson = req.body;
+    const user = await getUser(scoreJson.email);
 
-  if(user && await checkIfUserIsLanParticipant(user)) {
-    let isTLive = await isTournamentLive();
+    if(user && await checkIfUserIsLanParticipant(user)) {
+      let isTLive = await isTournamentLive();
 
-    if(isTLive) {
-      console.info("User is participant");
-      await validateAndSubmitScore(scoreJson, user, res);
+      if(isTLive) {
+        console.info("User is participant");
+        await validateAndSubmitScore(scoreJson, user, res);
+      } else {
+        tournamentNotLiveResponse(res);
+      }
     } else {
-      tournamentNotLiveResponse(res);
+      userNotFoundResponse(res);
     }
-  } else {
-    userNotFoundResponse(res);
+  } catch (error) {
+    res.status(500);
+    res.send('Error');
   }
 }
 
