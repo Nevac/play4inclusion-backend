@@ -83,13 +83,13 @@ async function getHighscore(req, res) {
 }
 
 export async function validateAndSubmitScore(scoreJson, user, res) {
-  if (isScoreValid(scoreJson)) {
+  // if (isScoreValid(scoreJson)) {
     await submitScore(scoreJson.score, user);
     res.send("score updated");
-  } else {
-    console.warn(`${user.email} has cheated`);
-    manipulatedGameResponse(res);
-  }
+  // } else {
+  //   console.warn(`${user.email} has cheated`);
+  //   manipulatedGameResponse(res);
+  // }
 }
 
 async function getStatus(req, res) {
