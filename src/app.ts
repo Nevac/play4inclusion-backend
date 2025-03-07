@@ -45,7 +45,7 @@ app.enable('trust proxy')
 
 var corsOptions = {
     credentials: true,
-    origin: process.env.ADMIN_PANEL_URL,
+    origin: [process.env.ADMIN_PANEL_URL, process.env.GAME_WEBGL_URL],
     optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
