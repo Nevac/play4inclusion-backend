@@ -300,11 +300,12 @@ export async function isTournamentLive() {
         },
         select: {
             tactive: true,
-            tclosed: true
+            tclosed: true,
+            topen: true
         }
     });
 
-    return tournament.tactive === 1 && tournament.tclosed === 0;
+    return tournament.tactive === 1 && tournament.tclosed === 0 && tournament.topen === 1;
 }
 
 export function getHashString(scoreJson) {
