@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan'
@@ -10,8 +10,6 @@ import tournamentRouter from './routes/tournament';
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import SQLiteSessionInitiator from "connect-sqlite3";
-import passport from "passport";
-import {Database} from "sqlite3";
 import {Strategy as LocalStrategy} from "passport-local";
 import {deserializeUser, serializeUser, verify} from "./services/auth.service";
 import ensureAuthenticated from "./middleware/ensureAuthenticated";
@@ -23,12 +21,12 @@ import rewardRouter from "./routes/reward";
 import rewardEventRouter from "./routes/rewardEvent";
 import RewardEventReadyCheckWorker from "./workers/RewardEventReadyCheckWorker";
 import {cleanupFailedRewardEvents} from "./services/rewardEvent.service";
+import passport from "passport";
 
 const port = process.env.PORT || 3000
 const app = express();
 const SQLiteStore = SQLiteSessionInitiator(session);
 const dbFileName = ':memory:';
-const db = new Database(dbFileName)
 
 
 //Middlewares
@@ -131,7 +129,7 @@ export const io = new Server(server, {
 });
 
 try {
-    buildWebsocketEndpoint(sessionMiddleware, passport);
+    buildWebsocketEndpoint();
     ActiveGameCheckWorker.startInterval(10 * 1000, 20 * 1000);
     RewardEventReadyCheckWorker.startInterval(10 * 1000);
 } catch (error) {

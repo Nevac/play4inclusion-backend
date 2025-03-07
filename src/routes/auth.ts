@@ -1,31 +1,27 @@
-import {PrismaClient, Prisma} from "@prisma/client";
+import express from "express";
+import {getUser} from "../services/tournament.service";
+import {checkIfUserIsLanParticipant} from "../services/user.service";
+import {userNotFoundResponse} from "./tournament";
 
-import express, {Express} from "express";
-import passport from 'passport';
-
-var md5 = require('md5');
 const router = express.Router();
 
 router.post('/login', login);
 router.post('/logout', logout);
 
-function login(req, res, next) {
-    passport.authenticate(
-        'local',
-        (err, account) => loginCallback(err, account, res, req, next)
-    )(req, res, next)
-}
-
-function loginCallback(err, account, res, req, next) {
-    req.logIn(account, function () {
-        if (account) {
+async function login(req, res, next) {
+    const email = req.body.email;
+    if(email) {
+        const user = await getUser(email);
+        if(user && await checkIfUserIsLanParticipant(user)) {
             res.status(200)
-                .send({id: account.id, nick: account.nick, email: account.email});
+                .send({id: user.id, nick: user.nick, email: user.email});
         } else {
             res.status(401)
                 .send('Could not log in');
         }
-    });
+    } else {
+        userNotFoundResponse(res);
+    }
 }
 
 function logout(req, res, next) {
@@ -36,11 +32,6 @@ function logout(req, res, next) {
         res.status(204);
         res.send();
     });
-}
-
-function userNotFoundResponse(res) {
-    res.status(404);
-    res.send("User not found");
 }
 
 export default router;
