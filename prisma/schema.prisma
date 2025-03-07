@@ -255,15 +255,16 @@ model event_sitzplan {
 }
 
 model event_sitzplatz {
-  id     Int     @id @default(autoincrement())
-  block  Int     @default(0)
-  row    Int     @default(0)
-  col    Int     @default(0)
-  type   Int     @default(0)
-  status Int     @default(0)
-  grp    String? @db.VarChar(255)
-  nr     Int?
-  etid   Int?    @default(0)
+  id       Int     @id @default(autoincrement())
+  block    Int     @default(0)
+  row      Int     @default(0)
+  col      Int     @default(0)
+  type     Int     @default(0)
+  status   Int     @default(0)
+  grp      String? @db.VarChar(255)
+  nr       Int?
+  etid     Int?    @default(0)
+  seat_pwd String? @db.VarChar(50)
 
   @@index([block], map: "block")
   @@index([status], map: "status")
@@ -1085,7 +1086,7 @@ model user {
   female              Int      @default(0)
   icquin              String   @default("") @db.VarChar(255)
   skype               String   @default("") @db.VarChar(255)
-  jabber              String   @default("") @db.VarChar(255)
+  discord             String   @default("") @db.VarChar(255)
   msn                 String   @default("") @db.VarChar(255)
   yahoo               String   @default("") @db.VarChar(255)
   aim                 String   @default("") @db.VarChar(255)
@@ -1168,14 +1169,15 @@ model user_log {
 }
 
 model user_orga {
-  id            Int    @id @default(autoincrement())
-  user_id       Int    @default(0)
-  funktion      String @default("") @db.VarChar(255)
-  team_forum    Int    @default(0)
-  display_team  Int    @default(0)
-  group_id      Int    @default(0)
-  display_order Int    @default(0)
-  rights        Int    @default(0)
+  id            Int     @id @default(autoincrement())
+  user_id       Int     @default(0)
+  funktion      String  @default("") @db.VarChar(255)
+  team_forum    Int     @default(0)
+  display_team  Int     @default(0)
+  group_id      Int     @default(0)
+  display_order Int     @default(0)
+  rights        Int     @default(0)
+  since         String? @default("") @db.VarChar(255)
 
   @@index([group_id], map: "group_id")
   @@index([user_id], map: "user_id")
@@ -1241,6 +1243,14 @@ model p4i_reward_event {
   start          DateTime @db.DateTime(0)
   end            DateTime @db.DateTime(0)
   progressStatus String   @db.VarChar(45)
+}
+
+model masterplan {
+  id            Int       @id @default(autoincrement())
+  resource_type String?   @db.VarChar(50)
+  resource_name String?   @db.VarChar(100)
+  start_time    DateTime? @db.DateTime(0)
+  end_time      DateTime? @db.DateTime(0)
 }
 
 enum pma__usergroups_allowed {

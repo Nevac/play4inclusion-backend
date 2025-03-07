@@ -4,21 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="changed project to typescript and added auth">
-      <change afterPath="$PROJECT_DIR$/src/routes/user.ts" afterDir="false" />
+    <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="removed score validation">
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/prisma/schema.prisma" beforeDir="false" afterPath="$PROJECT_DIR$/prisma/schema.prisma" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/routes/tournament.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/routes/score.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/tournament.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/error.pug" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/index.pug" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/layout.pug" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/random.pug" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/tournament.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/tournament.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,12 +19,20 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="JavaScript File" />
+        <option value="TypeScript JSX File" />
+        <option value="TypeScript File" />
       </list>
     </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+  "lastFilter": {
+    "state": "OPEN",
+    "assignee": "Nevac"
+  }
+}]]></component>
   <component name="GitSEFilterConfiguration">
     <file-type-list>
       <filtered-out-file-type name="LOCAL_BRANCH" />
@@ -43,6 +41,12 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="GithubPullRequestsUISettings"><![CDATA[{
+  "selectedUrlAndAccountId": {
+    "url": "https://github.com/lockandloadch/play4inclusion-backend.git",
+    "accountId": "662f5098-521b-4744-92e8-78345ee280bf"
+  }
+}]]></component>
   <component name="GoLibraries">
     <option name="indexEntireGoPath" value="false" />
   </component>
@@ -63,34 +67,48 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
+    "git-widget-placeholder": "main",
     "go.import.settings.migrated": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/Cagatay/Documents/Projects/freelance/Play4Inclusion/play4inclusion-bakcend/src/routes",
+    "last_opened_file_path": "C:/Users/Cagatay/Documents/Projects/freelance/Schweizer Paraplegiker Stiftung/Play4Inclusion/play4inclusion-admin-panel",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "yarn",
     "settings.editor.selected.configurable": "preferences.pluginManager",
-    "ts.external.directory.path": "C:\\Users\\Cagatay\\Documents\\Projects\\freelance\\Play4Inclusion\\play4inclusion-bakcend\\node_modules\\typescript\\lib",
+    "ts.external.directory.path": "C:\\Users\\Cagatay\\Documents\\Projects\\freelance\\Schweizer Paraplegiker Stiftung\\Play4Inclusion\\play4inclusion-bakcend\\node_modules\\typescript\\lib",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\workers" />
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes" />
-      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend" />
-      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\routes" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\services" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\middleware" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes\public" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\domain\roles" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\websocket" />
       <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes" />
+      <recent name="C:\Users\Cagatay\Documents\Projects\freelance\Play4Inclusion\play4inclusion-bakcend\src\routes\protected" />
     </key>
   </component>
   <component name="RunAnythingCache">
     <option name="myCommands">
       <command value="PrismaClient" />
     </option>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.23339.11" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.23339.11" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -123,7 +141,23 @@
       <workItem from="1702927466317" duration="4208000" />
       <workItem from="1702931794219" duration="1977000" />
       <workItem from="1702937787534" duration="14827000" />
-      <workItem from="1703002451472" duration="15756000" />
+      <workItem from="1703002451472" duration="17087000" />
+      <workItem from="1705055981809" duration="907000" />
+      <workItem from="1705143285398" duration="649000" />
+      <workItem from="1705148336377" duration="22000" />
+      <workItem from="1705950666243" duration="1215000" />
+      <workItem from="1707248567713" duration="16738000" />
+      <workItem from="1707310531061" duration="16009000" />
+      <workItem from="1707490997787" duration="1180000" />
+      <workItem from="1707492188859" duration="3946000" />
+      <workItem from="1707672388754" duration="40332000" />
+      <workItem from="1707832105796" duration="676000" />
+      <workItem from="1707842966880" duration="67028000" />
+      <workItem from="1708088290132" duration="7054000" />
+      <workItem from="1708107635317" duration="8970000" />
+      <workItem from="1708136576328" duration="4145000" />
+      <workItem from="1708175027093" duration="3003000" />
+      <workItem from="1741311178718" duration="3942000" />
     </task>
     <task id="LOCAL-00001" summary="updated backend to be more integrated with lock and load databases">
       <created>1675785788401</created>
@@ -182,7 +216,79 @@
       <option name="project" value="LOCAL" />
       <updated>1702947349507</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="implemented simple auth session">
+      <option name="closed" value="true" />
+      <created>1703035571600</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1703035571600</updated>
+    </task>
+    <task id="LOCAL-00010" summary="implemented who endpoint">
+      <option name="closed" value="true" />
+      <created>1707259631013</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1707259631013</updated>
+    </task>
+    <task id="LOCAL-00011" summary="added websocket handling">
+      <option name="closed" value="true" />
+      <created>1707819893684</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1707819893684</updated>
+    </task>
+    <task id="LOCAL-00012" summary="stability and bug fixes">
+      <option name="closed" value="true" />
+      <created>1708099692389</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1708099692389</updated>
+    </task>
+    <task id="LOCAL-00013" summary="trust proxy config">
+      <option name="closed" value="true" />
+      <created>1708117574239</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1708117574239</updated>
+    </task>
+    <task id="LOCAL-00014" summary="trust proxy config">
+      <option name="closed" value="true" />
+      <created>1708119497189</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1708119497189</updated>
+    </task>
+    <task id="LOCAL-00015" summary="trust proxy config">
+      <option name="closed" value="true" />
+      <created>1708119942761</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1708119942761</updated>
+    </task>
+    <task id="LOCAL-00016" summary="trust proxy config">
+      <option name="closed" value="true" />
+      <created>1708120845110</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1708120845110</updated>
+    </task>
+    <task id="LOCAL-00017" summary="removed score validation">
+      <option name="closed" value="true" />
+      <created>1708175222292</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1708175222292</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -220,7 +326,14 @@
     <MESSAGE value="added tournament endpoint" />
     <MESSAGE value="added null handling for score" />
     <MESSAGE value="changed project to typescript and added auth" />
-    <option name="LAST_COMMIT_MESSAGE" value="changed project to typescript and added auth" />
+    <MESSAGE value="implemented simple auth session" />
+    <MESSAGE value="implemented who endpoint" />
+    <MESSAGE value="added websocket handling" />
+    <MESSAGE value="stability and bug fixes" />
+    <MESSAGE value="trust proxy config" />
+    <MESSAGE value="updated same site setting" />
+    <MESSAGE value="removed score validation" />
+    <option name="LAST_COMMIT_MESSAGE" value="removed score validation" />
   </component>
   <component name="VgoProject">
     <settings-migrated>true</settings-migrated>
