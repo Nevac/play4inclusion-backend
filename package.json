@@ -5,7 +5,7 @@
   "scripts": {
     "build": "tsc",
     "start": "npm run tsc && node ./dist/app.js",
-    "postinstall": "npm run tsc"
+    "postinstall": "tsc"
   },
   "dependencies": {
     "@prisma/client": "^5.7.1",
