@@ -1,4 +1,4 @@
-import express, {Express} from 'express';
+import express from 'express';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan'
@@ -10,8 +10,6 @@ import tournamentRouter from './routes/tournament';
 import authRouter from "./routes/auth";
 import userRouter from "./routes/user";
 import SQLiteSessionInitiator from "connect-sqlite3";
-//import passport from "passport";
-import {Database} from "sqlite3";
 import {Strategy as LocalStrategy} from "passport-local";
 import {deserializeUser, serializeUser, verify} from "./services/auth.service";
 import ensureAuthenticated from "./middleware/ensureAuthenticated";
@@ -23,12 +21,12 @@ import rewardRouter from "./routes/reward";
 import rewardEventRouter from "./routes/rewardEvent";
 import RewardEventReadyCheckWorker from "./workers/RewardEventReadyCheckWorker";
 import {cleanupFailedRewardEvents} from "./services/rewardEvent.service";
+import passport from "passport";
 
 const port = process.env.PORT || 3000
 const app = express();
 const SQLiteStore = SQLiteSessionInitiator(session);
 const dbFileName = ':memory:';
-const db = new Database(dbFileName)
 
 
 //Middlewares
@@ -69,32 +67,32 @@ app.use(winstonLogger({
     } // optional: allows to skip some log messages based on request and/or response
 }));
 
-// const sessionMiddleware = session({
-//     secret: 'keyboard cat',
-//     resave: false,
-//     saveUninitialized: true,
-//     cookie: {
-//         httpOnly: false,
-//         sameSite: process.env.HTTPS === "true" ? 'none' : 'strict',
-//         maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE) * 60 * 60 * 1000,
-//         secure: process.env.HTTPS === "true"
-//     },
-//     store: new SQLiteStore(({db: dbFileName, dir: './var/db'})) as Store
-// })
+const sessionMiddleware = session({
+    secret: 'keyboard cat',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+        httpOnly: false,
+        sameSite: process.env.HTTPS === "true" ? 'none' : 'strict',
+        maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE) * 60 * 60 * 1000,
+        secure: process.env.HTTPS === "true"
+    },
+    store: new SQLiteStore(({db: dbFileName, dir: './var/db'})) as Store
+})
 
-// app.use(sessionMiddleware)
-// app.use(passport.initialize());
-// app.use(passport.authenticate('session'));
-// passport.use(new LocalStrategy(
-//     {
-//         usernameField: 'email',
-//         passwordField: 'password',
-//         passReqToCallback: true
-//     },
-//     verify
-// ));
-// passport.serializeUser(serializeUser);
-// passport.deserializeUser(deserializeUser);
+app.use(sessionMiddleware)
+app.use(passport.initialize());
+app.use(passport.authenticate('session'));
+passport.use(new LocalStrategy(
+    {
+        usernameField: 'email',
+        passwordField: 'password',
+        passReqToCallback: true
+    },
+    verify
+));
+passport.serializeUser(serializeUser);
+passport.deserializeUser(deserializeUser);
 
 app.use('/auth', authRouter);
 app.use('/tournament', tournamentRouter);

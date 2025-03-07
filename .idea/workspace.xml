@@ -5,10 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ee51c162-f69b-49a2-a9d5-e09c2df4e754" name="Changes" comment="removed score validation">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/app.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/app.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/websockets/setupWebsocket.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/setupWebsocket.ts" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/websockets/websockets.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/websockets/websockets.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/auth.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/auth.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/tournament.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/tournament.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/tournamentPublic.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/tournamentPublic.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/routes/user.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/routes/user.ts" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/services/user.service.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/services/user.service.ts" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,6 +72,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Node.js.app.ts.executor": "Run",
+    "Node.js.auth.ts.executor": "Run",
+    "Node.js.tournament.ts.executor": "Run",
+    "Node.js.user.service.ts.executor": "Run",
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.go.formatter.settings.were.checked": "true",
     "RunOnceActivity.go.migrated.go.modules.settings": "true",
