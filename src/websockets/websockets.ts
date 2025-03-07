@@ -1,10 +1,8 @@
 import setupWebsocket from "./setupWebsocket";
 import gameEvents from "./gameEvents";
 import {io} from "../app";
-import {Socket} from "socket.io";
-import {DefaultEventsMap} from "socket.io/dist/typed-events";
 
-export default function buildWebsocketEndpoint(sessionMiddleware, passport) {
+export default function buildWebsocketEndpoint() {
     io.on('connection', (socket) => {
         console.log('Websocket connected');
         console.log(socket.request['user']['id'])
@@ -14,5 +12,5 @@ export default function buildWebsocketEndpoint(sessionMiddleware, passport) {
             console.log(`connect_error due to ${err.message}`);
         });
     });
-    setupWebsocket(sessionMiddleware, passport)
+    setupWebsocket()
 }

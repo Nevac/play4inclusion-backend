@@ -1,6 +1,6 @@
 import {io} from "../app";
 
-export default function setupWebsocket(sessionMiddleware, passport) {
+export default function setupWebsocket() {
     function onlyForHandshake(middleware) {
         return (req, res, next) => {
             console.log("ATTEMPT");
@@ -18,8 +18,8 @@ export default function setupWebsocket(sessionMiddleware, passport) {
         };
     }
 
-    io.engine.use(onlyForHandshake(sessionMiddleware));
-    io.engine.use(onlyForHandshake(passport.session()));
+    // io.engine.use(onlyForHandshake(sessionMiddleware));
+    // io.engine.use(onlyForHandshake(passport.session()));
     io.engine.use(
         onlyForHandshake((req, res, next) => {
             if (req.user) {
