@@ -46,7 +46,7 @@ app.enable('trust proxy')
 var corsOptions = {
     credentials: true,
     origin: [process.env.ADMIN_PANEL_URL, process.env.GAME_WEBGL_URL],
-    optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204
 }
 app.use(cors(corsOptions));
 
@@ -75,7 +75,7 @@ const sessionMiddleware = session({
     saveUninitialized: true,
     cookie: {
         httpOnly: false,
-        sameSite: 'strict',
+        sameSite: process.env.HTTPS === "true" ? 'none' : 'strict',
         maxAge: parseInt(process.env.AUTH_SESSION_MAX_AGE) * 60 * 60 * 1000,
         secure: process.env.HTTPS === "true"
     },
