@@ -1,11 +1,7 @@
 import express from "express";
-import { PrismaClient } from '@prisma/client';
-import createError from 'http-errors';
 import {getImmediateRankings, getRankings, getTournamentParticipant, getUser} from "../services/tournament.service";
 import {checkIfUserIsLanParticipant} from "../services/user.service";
-const SHA2 = require("sha2");
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get('/score', async (req, res) => {

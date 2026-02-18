@@ -1,22 +1,18 @@
 import express from "express";
-import { PrismaClient } from '@prisma/client';
 import {
   getImmediateRankings,
   getRankings,
   getTournamentParticipant,
   getUser,
-  isTournamentLive, isScoreValid, submitScore, findScoreByUserId, parseMsToReadableTime, findAllScores
+  isTournamentLive, submitScore, findScoreByUserId, parseMsToReadableTime
 } from "../services/tournament.service";
 import {checkIfUserIsLanParticipant} from "../services/user.service";
-import ensureAuthenticated from "../middleware/ensureAuthenticated";
-const SHA2 = require("sha2");
 
-const prisma = new PrismaClient();
 const router = express.Router();
 
 router.get('/score', getScore);
-router.put('/score', ensureAuthenticated, putScore);
-router.get('/highscore', ensureAuthenticated, getHighscore);
+router.put('/score', putScore);
+router.get('/highscore', getHighscore);
 router.get('/status', getStatus);
 
 async function getScore(req, res) {
@@ -24,8 +20,8 @@ async function getScore(req, res) {
   const rankings = await getRankings()
   responseBody['rankings'] = rankings;
 
-  if(req.user && req.isAuthenticated()) {
-    const email = req.user.email;
+  const email = req.query.email;
+  if(email) {
     const user = await getUser(email);
     if(user && await checkIfUserIsLanParticipant(user)) {
       let tournamentParticipant = await getTournamentParticipant(user.id);
@@ -61,7 +57,8 @@ async function putScore(req, res) {
 }
 
 async function getHighscore(req, res) {
-  const email = req.user.email;
+  const email = req.query.email;
+  console.log(req.query)
   if(email) {
     const user = await getUser(email);
 

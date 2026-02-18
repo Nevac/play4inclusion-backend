@@ -10,10 +10,15 @@ export async function checkIfUserIsLanParticipant(user) {
     return !!lanParticipant;
 }
 
-export async function findUserByEmail(email) {
-    return await prisma.user.findFirst({
+export async function findUserByEmail(email: string) {
+    return prisma.user.findFirst({
         where: {
             email: email
+        },
+        select: {
+            id: true,
+            nick: true,
+            email: true
         }
     });
 }
