@@ -128,10 +128,10 @@ export const io = new Server(server, {
     }
 });
 
-try {
-    buildWebsocketEndpoint();
-    ActiveGameCheckWorker.startInterval(10 * 1000, 20 * 1000);
-    RewardEventReadyCheckWorker.startInterval(10 * 1000);
-} catch (error) {
-    console.log(error);
-}
+// try {
+//     buildWebsocketEndpoint();
+//     ActiveGameCheckWorker.startInterval(10 * 1000, 20 * 1000);
+//     RewardEventReadyCheckWorker.startInterval(10 * 1000);
+// } catch (error) {
+//     console.log(error);
+// }
